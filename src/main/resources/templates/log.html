@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,9 +14,9 @@
     <title>操作日志-教师助手-Teacher Assistant</title>
 
     <!--mdui css-->
-    <link href="lib_web/mdui/css/mdui.min.css" rel="stylesheet">
+    <link th:href="@{/lib_web/mdui/css/mdui.min.css}" rel="stylesheet">
 
-    <link href="css/common.css" rel="stylesheet">
+    <link th:href="@{/css/common.css}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
