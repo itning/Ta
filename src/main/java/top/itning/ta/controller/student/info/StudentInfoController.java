@@ -1,5 +1,7 @@
 package top.itning.ta.controller.student.info;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,10 @@ import top.itning.ta.exception.NullParameterException;
 import top.itning.ta.service.ClassManageService;
 import top.itning.ta.service.StudentInfoService;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -145,5 +150,30 @@ public class StudentInfoController {
         studentInfoService.addStudentInfo(studentInfo, file);
         System.out.println(studentInfo);
         return "redirect:/studentInfo/show/student/" + studentInfo.getId();
+    }
+
+    /**
+     * 下载学生信息
+     *
+     * @param id       学生ID用 - 符号分割ID
+     * @param response HttpServletResponse
+     * @throws IOException          文件操作失败抛出该异常
+     * @throws DataNotFindException 该学生ID没有找到则抛出该异常
+     */
+    @RequestMapping(value = "/down", method = RequestMethod.GET)
+    public void downStudentInfoListByClass(String id, HttpServletResponse response) throws IOException, DataNotFindException {
+        String[] idArray = StringUtils.split(id, "-");
+        for (String i : idArray) {
+            if (!NumberUtils.isParsable(i)) {
+                throw new IllegalArgumentException("参数不正确->" + i);
+            }
+        }
+        String nowTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String(("学生信息" + nowTime + ".xlsx").getBytes(), "ISO-8859-1"));
+        ServletOutputStream outputStream = response.getOutputStream();
+        studentInfoService.downStudentInfo(outputStream, idArray);
+        outputStream.flush();
+        outputStream.close();
     }
 }

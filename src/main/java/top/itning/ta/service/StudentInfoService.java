@@ -6,6 +6,8 @@ import top.itning.ta.entity.StudentInfo;
 import top.itning.ta.exception.DataNotFindException;
 import top.itning.ta.exception.NullParameterException;
 
+import javax.servlet.ServletOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -58,4 +60,14 @@ public interface StudentInfoService {
      * @throws DataNotFindException 学生ID不存在则抛出该异常
      */
     void delStudentInfo(String id) throws DataNotFindException;
+
+    /**
+     * 根据学生ID批量生成EXCEL文件生成
+     *
+     * @param servletOutputStream servlet输出流
+     * @param id                  学生ID
+     * @throws DataNotFindException 如果学生ID未找到则抛出该异常
+     * @throws IOException          文件操作出错抛出该异常
+     */
+    void downStudentInfo(ServletOutputStream servletOutputStream, String... id) throws DataNotFindException, IOException;
 }

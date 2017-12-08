@@ -1,5 +1,10 @@
 package top.itning.ta.service.impl;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,9 +19,12 @@ import top.itning.ta.exception.DataNotFindException;
 import top.itning.ta.exception.NullParameterException;
 import top.itning.ta.service.StudentInfoService;
 
+import javax.servlet.ServletOutputStream;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -134,5 +142,90 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         //先删除请假信息
         studentLeaveDao.deleteAllBySid(studentInfoDao.getOne(id));
         studentInfoDao.delete(id);
+    }
+
+    @Override
+    public void downStudentInfo(ServletOutputStream servletOutputStream, String... id) throws DataNotFindException, IOException {
+        for (String s : id) {
+            if (!studentInfoDao.exists(s)) {
+                throw new DataNotFindException("学生ID:" + s + "没有找到");
+            }
+        }
+        Workbook workbook = new XSSFWorkbook();
+        //创建工作簿 名:专业+班级
+        Sheet sheet = workbook.createSheet();
+        Row row = sheet.createRow(0);
+        List<String> titleList = new ArrayList<>();
+        titleList.add("学号");
+        titleList.add("姓名");
+        titleList.add("性别");
+        titleList.add("出生日期");
+        titleList.add("联系电话");
+        titleList.add("家长电话");
+        titleList.add("入学时间");
+        titleList.add("是否在籍");
+        titleList.add("班内职务");
+        titleList.add("班主任");
+        titleList.add("班级");
+        titleList.add("家庭地址");
+        titleList.add("学院");
+        titleList.add("专业");
+        titleList.add("备注");
+        final int[] nowCell = {0};
+        titleList.forEach(s -> {
+            Cell cell = row.createCell(nowCell[0]++);
+            cell.setCellValue(s);
+        });
+        nowCell[0] = 1;
+        for (String s : id) {
+            StudentInfo studentInfo = studentInfoDao.findOne(s);
+            Row dataRow = sheet.createRow(nowCell[0]++);
+            Cell idcell = dataRow.createCell(0);
+            idcell.setCellValue(studentInfo.getId());
+
+            Cell namecell = dataRow.createCell(1);
+            namecell.setCellValue(studentInfo.getName());
+
+            Cell sexcell = dataRow.createCell(2);
+            sexcell.setCellValue(studentInfo.isSex() ? "男" : "女");
+
+            Cell birthdaycell = dataRow.createCell(3);
+            birthdaycell.setCellValue(new SimpleDateFormat("yyyy-MM-dd").format(studentInfo.getBirthday()));
+
+            Cell telcell = dataRow.createCell(4);
+            telcell.setCellValue(studentInfo.getTel());
+
+            Cell htelcell = dataRow.createCell(5);
+            htelcell.setCellValue(studentInfo.getHtel());
+
+            Cell intimecell = dataRow.createCell(6);
+            intimecell.setCellValue(new SimpleDateFormat("yyyy-MM").format(studentInfo.getIntime()));
+
+            Cell incell = dataRow.createCell(7);
+            incell.setCellValue(studentInfo.isIsin() ? "是" : "否");
+
+            Cell positioncell = dataRow.createCell(8);
+            positioncell.setCellValue(studentInfo.getPosition());
+
+            Cell teachercell = dataRow.createCell(9);
+            teachercell.setCellValue(studentInfo.getTeacher());
+
+            Cell classcell = dataRow.createCell(10);
+            classcell.setCellValue(studentInfo.getClazz().getClazz());
+
+            Cell addresscell = dataRow.createCell(11);
+            addresscell.setCellValue(studentInfo.getAddress());
+
+            Cell collegecell = dataRow.createCell(12);
+            collegecell.setCellValue(studentInfo.getCollege());
+
+            Cell professioncell = dataRow.createCell(13);
+            professioncell.setCellValue(studentInfo.getProfession());
+
+            Cell remarkscell = dataRow.createCell(13);
+            remarkscell.setCellValue(studentInfo.getRemarks());
+        }
+        workbook.write(servletOutputStream);
+        workbook.close();
     }
 }

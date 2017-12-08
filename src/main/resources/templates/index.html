@@ -332,10 +332,11 @@
 
     /*下载选中*/
     function down_select() {
+        var downId = "";
         $('.mdui-table-row-selected').each(function () {
-            var data = $(this).data('id');
-            console.log('下载-->' + data);
+            downId += $(this).data('id') + "-";
         });
+        window.open("/studentInfo/down?id=" + downId.substring(0, downId.length - 1), "_blank");
     }
 
     /*删除选中*/
