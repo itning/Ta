@@ -1,6 +1,11 @@
 package top.itning.ta.exception;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import top.itning.ta.entity.ServerMessage;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 异常处理
@@ -17,7 +22,7 @@ public class ExceptionResolver {
      * @return 异常消息
      * @throws Exception 异常
      */
-    /*@ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ServerMessage jsonErrorHandler(HttpServletRequest req, Exception e) throws Exception {
         ServerMessage serverMessage = new ServerMessage();
@@ -29,5 +34,5 @@ public class ExceptionResolver {
         serverMessage.setMsg(e.getMessage());
         serverMessage.setUrl(req.getRequestURL().toString());
         return serverMessage;
-    }*/
+    }
 }
