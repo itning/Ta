@@ -1,0 +1,33 @@
+server:
+  port: 8080
+debug: false
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ta?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&connectTimeout=0&serverTimezone=UTC
+    username: root
+    password: kingston
+  thymeleaf:
+    cache: false
+    mode: HTML
+  mvc:
+    favicon:
+      enabled: false
+  output:
+    ansi:
+      enabled: detect #控制台多彩输出
+  http:
+    multipart:
+      location: C:/Users/Ning/Desktop/upload/ #文件上传路径
+  resources:
+    static-locations: /META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${spring.http.multipart.location}
+security:
+  user:
+    name: 1
+    password: 1
+logging:
+  level: debug

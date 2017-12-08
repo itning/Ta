@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="学生管理系统"/>
+    <meta name="keywords" content="学生管理系统"/>
+    <meta name="author" content="LANG"/>
+
+    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>-->
+
+    <title>历史请假信息-教师助手-Teacher Assistant</title>
+
+    <!--mdui css-->
+    <link th:href="@{/lib_web/mdui/css/mdui.min.css}" rel="stylesheet">
+
+    <link th:href="@{/css/common.css}" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i
+                class="mdui-icon material-icons">menu</i></a>
+        <p>教师助手 Teacher Assistant</p>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="javascript:window.location.reload();" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">refresh</i></a>
+    </div>
+</header>
+
+<nav class="mdui-drawer mdui-card" id="left-drawer">
+    <div class="mdui-card-media">
+        <img th:src="@{/image/card.jpg}"/>
+        <div class="mdui-card-media-covered">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">舒露</div>
+                <div class="mdui-card-primary-subtitle">欢迎</div>
+            </div>
+        </div>
+    </div>
+    <ul class="mdui-list mdui-card-content" mdui-collapse="{accordion: true}">
+        <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
+                <div class="mdui-list-item-content">学生信息管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+            <div th:each="clazz : ${classList} " class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <!--/*@thymesVar id="clazz" type="top.itning.ta.entity.Clazz"*/-->
+                <!--/*@thymesVar id="id" type="java.lang.String"*/-->
+                <a th:id="${clazz.id}" th:href="${'#/'+clazz.id}" th:text="${clazz.clazz}"
+                   class="mdui-list-item mdui-ripple">1602班</a>
+            </div>
+        </li>
+
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item mdui-collapse-item-open">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
+                <div class="mdui-list-item-content">学生请假管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <li class="mdui-list-item mdui-ripple mdui-list-item-active">历史请假信息</li>
+                <li class="mdui-list-item mdui-ripple">查询请假信息</li>
+                <li class="mdui-list-item mdui-ripple">添加请假信息</li>
+            </ul>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+            <a th:href="@{/class/show}" class="mdui-list-item-content">班级管理</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">color_lens</i>
+            <a href="#" class="mdui-list-item-content">更换主题</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <label class="mdui-switch">
+                <input type="checkbox" id="night_mode"/>
+                <i class="mdui-switch-icon"></i>
+            </label>
+            <div class="mdui-list-item-content">夜间模式</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">vpn_key</i>
+            <a href="#" class="mdui-list-item-content">注销登陆</a>
+        </li>
+    </ul>
+</nav>
+<section class="mdui-container-fluid">
+    <div class="mdui-card mdui-m-b-2">
+        <div class="mdui-card-media">
+            <img th:src="@{/image/class_img.png}"/>
+            <div class="mdui-card-media-covered">
+                <div class="mdui-card-primary">
+                    <div class="mdui-card-primary-title">历史请假信息</div>
+                    <div class="mdui-card-primary-subtitle">学生请假管理</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-table-fluid mdui-m-b-1">
+        <table class="mdui-table mdui-table-selectable mdui-table-hoverable">
+            <thead>
+            <tr>
+                <th>学号</th>
+                <th style="min-width: 115px">姓名</th>
+                <th>起始时间</th>
+                <th>时常(天)</th>
+                <th>事项</th>
+                <th>原因</th>
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--/*@thymesVar id="studentLeaveList" type="java.util.List<top.itning.ta.entity.StudentLeave>"*/-->
+            <tr th:each="studentLeave:${studentLeaveList}" th:id="${studentLeave.id}" th:data-id="${studentLeave.id}">
+                <td th:text="${studentLeave.sid.id}">201601010301</td>
+                <td th:text="${studentLeave.sid.name}">荆小余</td>
+                <td th:text="${#dates.format(studentLeave.starttime,'yyyy-MM-dd')}">2016-05-30</td>
+                <td th:text="${studentLeave.often}">3</td>
+                <td th:text="${studentLeave.matter.name}">事假</td>
+                <td th:text="${studentLeave.reason}">回家</td>
+                <td th:text="${studentLeave.remarks}">无</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="mdui-card">
+            <div class="mdui-card-content">
+                <button id="down_select_btn" onclick="down_select()"
+                        class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" disabled>选中下载
+                </button>
+                <button id="del_select_btn" onclick="del_select(false)"
+                        class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" disabled>选中删除
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-dialog" id="show_alert">
+        <div class="mdui-dialog-title">确定删除吗?</div>
+        <div class="mdui-dialog-content">这会删除该生请假信息!</div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+            <button class="mdui-btn mdui-ripple" onclick="del_select(true)" mdui-dialog-close>确认</button>
+        </div>
+    </div>
+</section>
+<script th:src="@{/lib_web/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/lib_web/mdui/js/mdui.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script>
+    'use strict';
+    $(function () {
+        /*根据复选框是否选中设置按钮是否可用*/
+        $('.mdui-checkbox input:checkbox').click(function () {
+            var $downSelectBtn = $('#down_select_btn');
+            var $delSelectBtn = $('#del_select_btn');
+            if ($(this).prop('checked')) {
+                $downSelectBtn.removeAttr('disabled');
+                $delSelectBtn.removeAttr('disabled');
+            } else {
+                $downSelectBtn.attr("disabled", "disabled");
+                $delSelectBtn.attr("disabled", "disabled");
+            }
+        });
+    });
+
+    /*删除选中*/
+    function del_select(b) {
+        if (b) {
+            $('.mdui-table-row-selected').each(function () {
+                var del_id = $(this).data('id');
+                console.log('删除-->' + del_id);
+                $.get("/studentLeave/del/" + del_id, function (data) {
+                    if (data.code === 200) {
+                        console.log('删除-->' + del_id + "成功");
+                        $('#' + del_id).remove();
+                    } else {
+                        alert('删除-->' + del_id + "失败\nCODE:" + data.code + "\nMSG:" + data.msg + "\nURL:" + data.url);
+                        console.error('删除-->' + del_id + "失败\nCODE:" + data.code + "\nMSG:" + data.msg + "\nURL:" + data.url);
+                    }
+                });
+            });
+        } else {
+            new mdui.Dialog('#show_alert').open();
+        }
+
+    }
+</script>
+</body>
+</html>

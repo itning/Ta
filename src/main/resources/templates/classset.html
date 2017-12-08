@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="学生管理系统"/>
+    <meta name="keywords" content="学生管理系统"/>
+    <meta name="author" content="LANG"/>
+
+    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>-->
+
+    <title>班级管理-学生管理系统</title>
+
+    <!--mdui css-->
+    <link th:href="@{/lib_web/mdui/css/mdui.min.css}" rel="stylesheet">
+
+    <link th:href="@{/css/common.css}" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i
+                class="mdui-icon material-icons">menu</i></a>
+        <p>学生管理系统</p>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="javascript:window.location.reload();" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">refresh</i></a>
+    </div>
+</header>
+
+<nav class="mdui-drawer mdui-card" id="left-drawer">
+    <div class="mdui-card-media">
+        <img th:src="@{/image/card.jpg}"/>
+        <div class="mdui-card-media-covered">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">舒露</div>
+                <div class="mdui-card-primary-subtitle">欢迎</div>
+            </div>
+        </div>
+    </div>
+    <ul class="mdui-list mdui-card-content" mdui-collapse="{accordion: true}">
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
+                <div class="mdui-list-item-content">学生信息管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <!--/*@thymesVar id="classList" type="java.util.List"*/-->
+            <div th:each="clazz : ${classList} " class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <!--/*@thymesVar id="clazz" type="top.itning.ta.entity.Clazz"*/-->
+                <!--/*@thymesVar id="id" type="java.lang.String"*/-->
+                <a th:id="${clazz.id}" th:href="${'/#/'+clazz.id}" th:text="${clazz.clazz}"
+                   class="mdui-list-item mdui-ripple">1602班</a>
+            </div>
+        </li>
+        <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
+                <div class="mdui-list-item-content">学生请假管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <li class="mdui-list-item mdui-ripple">历史请假信息</li>
+                <li class="mdui-list-item mdui-ripple">查询请假信息</li>
+                <li class="mdui-list-item mdui-ripple">添加请假信息</li>
+            </ul>
+        </li>
+        <li class="mdui-list-item mdui-ripple mdui-list-item-active">
+            <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+            <a th:href="@{/class/show}" class="mdui-list-item-content">班级管理</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">color_lens</i>
+            <a href="#" class="mdui-list-item-content">更换主题</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <label class="mdui-switch">
+                <input type="checkbox" id="night_mode"/>
+                <i class="mdui-switch-icon"></i>
+            </label>
+            <div class="mdui-list-item-content">夜间模式</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">vpn_key</i>
+            <a href="#" class="mdui-list-item-content">注销登陆</a>
+        </li>
+    </ul>
+</nav>
+<section class="mdui-container-fluid">
+    <div class="mdui-card mdui-m-b-2">
+        <div class="mdui-card-media">
+            <img th:src="@{/image/class_img.png}"/>
+            <div class="mdui-card-media-covered">
+                <div class="mdui-card-primary">
+                    <div class="mdui-card-primary-title">班级管理</div>
+                    <div class="mdui-card-primary-subtitle">学生管理系统</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-table-fluid mdui-m-b-1">
+        <table th:if="${classList.size()!=0}" class="mdui-table mdui-table-selectable mdui-table-hoverable">
+            <thead>
+            <tr>
+                <th>班级</th>
+                <th>班主任</th>
+                <th style="min-width: 115px">所属学院</th>
+                <th style="min-width: 115px">所属专业</th>
+                <th>学生数量</th>
+            </tr>
+            </thead>
+            <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+            <tbody>
+            <tr th:each="clazz:${classList}" th:data-id="${clazz.id}">
+                <td><a th:href="${'/#/'+clazz.id}" target="_blank" th:text="${clazz.clazz}">1603</a></td>
+                <td th:text="${clazz.teacher}">于洪</td>
+                <td th:text="${clazz.college}">软件学院</td>
+                <td th:text="${clazz.profession}">软件工程</td>
+                <td th:text="${clazz.num}">29</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="mdui-card">
+            <div class="mdui-card-content">
+                <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+                <button th:if="${classList.size()!=0}" id="del_select_btn" onclick="del_select(false)"
+                        class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" disabled>选中删除
+                </button>
+                <button id="add_class_btn" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                        mdui-dialog="{target: '#add_class'}">添加班级
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-dialog mdui-p-a-5" id="add_class">
+        <form id="class_form">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">班级</label>
+                <input name="clazz" class="mdui-textfield-input" type="text" maxlength="10"/>
+                <div class="mdui-textfield-error">班级不能为空</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">班主任</label>
+                <input name="teacher" class="mdui-textfield-input" type="text" maxlength="10"/>
+                <div class="mdui-textfield-error">班主任不能为空</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">所属学院</label>
+                <input name="college" class="mdui-textfield-input" type="text" maxlength="15"/>
+                <div class="mdui-textfield-error">学院不能为空</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">所属专业</label>
+                <input name="profession" class="mdui-textfield-input" type="text" maxlength="15"/>
+                <div class="mdui-textfield-error">专业不能为空</div>
+            </div>
+            <div class="mdui-card-actions" style="top: 20px;">
+                <input type="button" onclick="add_class()"
+                       class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" value="完成">
+                <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" mdui-dialog-close>取消
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="mdui-dialog" id="show_alert">
+        <div class="mdui-dialog-title">确定删除吗?</div>
+        <div class="mdui-dialog-content">这会删除该班级所有信息!</div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+            <button class="mdui-btn mdui-ripple" onclick="del_select(true)" mdui-dialog-close>确认</button>
+        </div>
+    </div>
+</section>
+<script th:src="@{/lib_web/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/lib_web/mdui/js/mdui.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script>
+    'use strict';
+    $(function () {
+        /*根据复选框是否选中设置按钮是否可用*/
+        $('.mdui-checkbox input:checkbox').click(function () {
+            var $downSelectBtn = $('#down_select_btn');
+            var $delSelectBtn = $('#del_select_btn');
+            if ($(this).prop('checked')) {
+                $downSelectBtn.removeAttr('disabled');
+                $delSelectBtn.removeAttr('disabled');
+            } else {
+                $downSelectBtn.attr("disabled", "disabled");
+                $delSelectBtn.attr("disabled", "disabled");
+            }
+        });
+
+        $(".mdui-textfield input").blur(function () {
+            if ($(this).val() === "") {
+                $(this).parent().addClass('mdui-textfield-invalid');
+            } else {
+                $(this).parent().removeClass('mdui-textfield-invalid');
+            }
+        });
+    });
+
+
+    /*删除选中*/
+    function del_select(b) {
+        if (b) {
+            $('.mdui-table-row-selected').each(function () {
+                var that = $(this);
+                var del_id = that.data('id');
+                console.log('删除-->' + del_id);
+                $.get("/class/del/" + del_id, function (data) {
+                    if (data.code === 200) {
+                        that.remove();
+                    } else {
+                        mdui.snackbar({
+                            message: '删除失败!\nCODE:' + data.code + '\nMSG:' + data.msg + '\nURL:' + data.url
+                        });
+                    }
+                })
+            });
+        } else {
+            new mdui.Dialog('#show_alert').open();
+        }
+    }
+
+    /*添加班级*/
+    function add_class() {
+        var isnull = false;
+        $(".mdui-textfield input[type='text']").each(function () {
+            console.log($(this).val());
+            if ($(this).val() === "") {
+                isnull = true;
+                $(this).parent().addClass('mdui-textfield-invalid');
+            } else {
+                $(this).parent().removeClass('mdui-textfield-invalid');
+            }
+        });
+        if (!isnull) {
+            $.get("/class/add?" + ($('#class_form').serialize()), function (data) {
+                if (data.code === 200) {
+                    window.location.reload();//刷新当前页面.
+                } else {
+                    mdui.snackbar({
+                        message: '添加失败!\nCODE:' + data.code + '\nMSG:' + data.msg + '\nURL:' + data.url
+                    });
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

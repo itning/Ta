@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="学生管理系统"/>
+    <meta name="keywords" content="学生管理系统"/>
+    <meta name="author" content="LANG"/>
+
+    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>-->
+
+    <title>查询请假信息-教师助手-Teacher Assistant</title>
+
+    <!--mdui css-->
+    <link href="lib_web/mdui/css/mdui.min.css" rel="stylesheet">
+
+    <link href="css/common.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .mdui-checkbox {
+            padding-right: 10px;
+        }
+    </style>
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i
+                class="mdui-icon material-icons">menu</i></a>
+        <p>教师助手 Teacher Assistant</p>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="javascript:window.location.reload();" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">refresh</i></a>
+    </div>
+</header>
+
+<nav class="mdui-drawer mdui-card" id="left-drawer">
+    <div class="mdui-card-media">
+        <img src="image/card.jpg"/>
+        <div class="mdui-card-media-covered">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">舒露</div>
+                <div class="mdui-card-primary-subtitle">欢迎</div>
+            </div>
+        </div>
+    </div>
+    <ul class="mdui-list mdui-card-content" mdui-collapse="{accordion: true}">
+        <li class="mdui-collapse-item">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
+                <div class="mdui-list-item-content">学生信息管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <li class="mdui-list-item mdui-ripple"><a href="#">1601班</a></li>
+                <li class="mdui-list-item mdui-ripple"><a href="#">1602班</a></li>
+                <li class="mdui-list-item mdui-ripple"><a href="#">1603班</a></li>
+                <li class="mdui-list-item mdui-ripple"><a href="#">1604班</a></li>
+            </ul>
+        </li>
+
+        <li class="mdui-collapse-item mdui-collapse-item-open">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
+                <div class="mdui-list-item-content">学生请假管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <li class="mdui-list-item mdui-ripple">历史请假信息</li>
+                <li class="mdui-list-item mdui-ripple mdui-list-item-active">查询请假信息</li>
+                <li class="mdui-list-item mdui-ripple">添加请假信息</li>
+            </ul>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+            <a href="#" class="mdui-list-item-content">班级管理</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">color_lens</i>
+            <a href="#" class="mdui-list-item-content">更换主题</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <label class="mdui-switch">
+                <input type="checkbox" id="night_mode"/>
+                <i class="mdui-switch-icon"></i>
+            </label>
+            <div class="mdui-list-item-content">夜间模式</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">vpn_key</i>
+            <a href="#" class="mdui-list-item-content">注销登陆</a>
+        </li>
+    </ul>
+</nav>
+<section class="mdui-container">
+
+    <form id="search_form" action="http://itning.top" method="get">
+        <div class="mdui-table-fluid">
+            <table class="mdui-table" style="width: 100%">
+                <tr>
+                    <td class="mdui-col-xs-8">
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <i class="mdui-icon material-icons">search</i>
+                            <label class="mdui-textfield-label" id="show_info">请输入要查询的姓名</label>
+                            <input name="key" type="text" class="mdui-textfield-input"/>
+                        </div>
+                    </td>
+                    <td class="mdui-col-xs-2" style="width: 10%"><label class="mdui-radio">
+                        <input type="radio" name="type" data-id="a" checked/>
+                        <i class="mdui-radio-icon"></i>
+                        姓名
+                    </label>
+                        <label class="mdui-radio">
+                            <input type="radio" name="type" data-id="b"/>
+                            <i class="mdui-radio-icon"></i>
+                            学号
+                        </label></td>
+                    <td class="mdui-col-xs-2 mdui-p-t-2">
+                        <input type="button" onclick="search()" style="height: 70px;"
+                               class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-btn-block"
+                               value="查询"/>
+                    </td>
+                </tr>
+                <tr class="mdui-m-t-5">
+                    <td class="mdui-col-xs-2"><p class="mdui-p-a-1">请假时长:</p></td>
+                    <td class="mdui-col-xs-10" id="time">
+                        <a href="javascript:clearChecked('time')" style="margin-right: 30px"
+                           class="mdui-btn mdui-ripple"
+                        >不限</a>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            0.5
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1天
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1.5天
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            2天
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            2.5天
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            3天
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            3天以上
+                        </label>
+                    </td>
+                </tr>
+                <tr class="mdui-m-t-5">
+                    <td class="mdui-col-xs-2"><p class="mdui-p-a-1">查询起始时间:</p></td>
+                    <td class="mdui-col-xs-4"><input readonly="readonly" id="showstartdate"
+                                                     class="mdui-textfield-input"
+                                                     type="text" maxlength="10"
+                                                     onfocus="WdatePicker({skin:'twoer',dateFmt:'yyyy年MM月dd日',vel:'startdate',maxDate:'#F{$dp.$D(\'showenddate\')}'})"/><input
+                            id="startdate" name="startdate" type="text" class="mdui-hidden"></td>
+                    <td class="mdui-col-xs-2"><p class="mdui-p-a-1">查询结束时间:</p></td>
+                    <td class="mdui-col-xs-4"><input readonly="readonly" id="showenddate"
+                                                     class="mdui-textfield-input"
+                                                     type="text" maxlength="10"
+                                                     onfocus="WdatePicker({skin:'twoer',dateFmt:'yyyy年MM月dd日',vel:'enddate',minDate:'#F{$dp.$D(\'showstartdate\')}'})"/><input
+                            id="enddate" name="enddate" type="text" class="mdui-hidden"></td>
+                </tr>
+                <tr class="mdui-m-t-5">
+                    <td class="mdui-col-xs-1"><p class="mdui-p-a-1">事项:</p></td>
+                    <td class="mdui-col-xs-11" id="matter">
+                        <a href="javascript:clearChecked('matter')" style="margin-right: 30px"
+                           class="mdui-btn mdui-ripple"
+                        >不限</a>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            事假
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            病假
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input type="checkbox"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            旷课
+                        </label>
+                    </td>
+                </tr>
+                <tr class="mdui-m-t-5">
+                    <td class="mdui-col-xs-1"><p class="mdui-p-a-1">班级:</p></td>
+                    <td class="mdui-col-xs-11" id="class">
+                        <a href="javascript:clearChecked('class')" style="margin-right: 30px"
+                           class="mdui-btn mdui-ripple"
+                        >不限</a>
+                        <label class="mdui-checkbox">
+                            <input id="checkbox1" name="class" type="checkbox" value="1601"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1601班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1601"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1602班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1601"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1603班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1602"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1603班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1603"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1603班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1604"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1603班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1605"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1603班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1606"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1603班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1607"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1603班
+                        </label>
+                        <label class="mdui-checkbox">
+                            <input name="class" type="checkbox" value="1608"/>
+                            <i class="mdui-checkbox-icon"></i>
+                            1603班
+                        </label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <div class="mdui-typo">
+        <hr/>
+    </div>
+    <div class="mdui-progress">
+        <div class="mdui-progress-indeterminate"></div>
+    </div>
+    <div class="mdui-table-fluid">
+        <table id="result" class="mdui-table mdui-table-selectable mdui-table-hoverable">
+            <thead>
+            <tr>
+                <th>学号</th>
+                <th style="min-width: 115px">姓名</th>
+                <th>起始时间</th>
+                <th>时常(天)</th>
+                <th>事项</th>
+                <th>原因</th>
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-id="asdads">
+                <td><a href="#" target="_blank" class="">201601010301</a></td>
+                <td>荆小余</td>
+                <td>2016-05-30</td>
+                <td>3</td>
+                <td>事假</td>
+                <td>回家</td>
+                <td>无</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="mdui-card">
+        <div class="mdui-card-content">
+            <button id="down_select_btn" onclick="down_select()"
+                    class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" disabled>选中下载
+            </button>
+            <button id="del_select_btn" onclick="del_select()"
+                    class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" disabled>选中删除
+            </button>
+        </div>
+    </div>
+</section>
+<script src="lib_web/jquery/jquery-3.2.1.min.js"></script>
+<script src="lib_web/mdui/js/mdui.min.js"></script>
+<script src="js/common.js"></script>
+<script src="lib_web/datepicker/WdatePicker.js"></script>
+<script>
+    'use strict';
+    $(function () {
+        /*根据复选框是否选中设置按钮是否可用*/
+        $('#result .mdui-checkbox input:checkbox').click(function () {
+            var $downSelectBtn = $('#down_select_btn');
+            var $delSelectBtn = $('#del_select_btn');
+            if ($(this).prop('checked')) {
+                $downSelectBtn.removeAttr('disabled');
+                $delSelectBtn.removeAttr('disabled');
+            } else {
+                $downSelectBtn.attr("disabled", "disabled");
+                $delSelectBtn.attr("disabled", "disabled");
+            }
+        });
+
+        $("input[type=radio]").change(function () {
+            var $showInfo = $('#show_info');
+            if ($(this).data('id') === 'a') {
+                $showInfo.html("请输入要查询的姓名");
+            } else {
+                $showInfo.html("请输入要查询的学号");
+            }
+
+
+        });
+    });
+
+
+    /*取消选择*/
+    function clearChecked(id) {
+        $('#' + id).find("input[type=checkbox]").prop('checked', false);
+    }
+
+    function search() {
+        $('#search_form').submit();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="学生管理系统"/>
+    <meta name="keywords" content="学生管理系统"/>
+    <meta name="author" content="LANG"/>
+
+    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon"/>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>-->
+
+    <title>学生信息详情-学生管理系统</title>
+
+    <!--mdui css-->
+    <link th:href="@{/lib_web/mdui/css/mdui.min.css}" rel="stylesheet">
+
+    <link th:href="@{/css/common.css}" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        table tr {
+            height: 80px;
+        }
+
+        td {
+            width: 10%;
+            text-align: center;
+        }
+
+        p {
+            max-width: none;
+            min-width: 88px;
+        }
+
+        @media (min-width: 992px) {
+            .info_p {
+                padding: 0 15% 0 15%;
+            }
+        }
+    </style>
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i
+                class="mdui-icon material-icons">menu</i></a>
+        <p>学生管理系统</p>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="javascript:window.location.reload();" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">refresh</i></a>
+    </div>
+</header>
+
+<nav class="mdui-drawer mdui-card" id="left-drawer">
+    <div class="mdui-card-media">
+        <img th:src="@{/image/card.jpg}"/>
+        <div class="mdui-card-media-covered">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">舒露</div>
+                <div class="mdui-card-primary-subtitle">欢迎</div>
+            </div>
+        </div>
+    </div>
+    <ul class="mdui-list mdui-card-content" mdui-collapse="{accordion: true}">
+        <li class="mdui-collapse-item mdui-collapse-item-open">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
+                <div class="mdui-list-item-content">学生信息管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <!--/*@thymesVar id="classList" type="java.util.List"*/-->
+            <div th:each="clazz : ${classList} " class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <!--/*@thymesVar id="clazz" type="top.itning.ta.entity.Clazz"*/-->
+                <!--/*@thymesVar id="id" type="java.lang.String"*/-->
+                <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                <a th:id="${clazz.id}" th:href="${'/#/'+clazz.id}" th:text="${clazz.clazz}"
+                   class="mdui-list-item mdui-ripple"
+                   th:classappend="${studentInfo.clazz.id==clazz.id?'mdui-list-item-active':''}">1602班</a>
+            </div>
+        </li>
+
+        <li class="mdui-collapse-item">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
+                <div class="mdui-list-item-content">学生请假管理</div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <li class="mdui-list-item mdui-ripple">历史请假信息</li>
+                <li class="mdui-list-item mdui-ripple">查询请假信息</li>
+                <li class="mdui-list-item mdui-ripple">添加请假信息</li>
+            </ul>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+            <a th:href="@{/class/show}" class="mdui-list-item-content">班级管理</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">color_lens</i>
+            <a href="#" class="mdui-list-item-content">更换主题</a>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <label class="mdui-switch">
+                <input type="checkbox" id="night_mode"/>
+                <i class="mdui-switch-icon"></i>
+            </label>
+            <div class="mdui-list-item-content">夜间模式</div>
+        </li>
+        <li class="mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons">vpn_key</i>
+            <a href="#" class="mdui-list-item-content">注销登陆</a>
+        </li>
+    </ul>
+</nav>
+<section class="mdui-container mdui-m-t-2">
+    <div class="mdui-card info_p">
+        <div class="mdui-card-content">
+            <div><!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                <h1 class="mdui-text-center"
+                    th:text="${studentInfo.college+studentInfo.clazz.clazz+studentInfo.name+'同学信息'}">
+                    软件学院1603班荆小余同学信息</h1></div>
+            <div class="mdui-table-fluid">
+                <form th:action="@{/studentInfo/modify/student}" id="edit_form" method="post"
+                      enctype="multipart/form-data">
+                    <table border=1 cellspacing=0 cellpadding=0 width=523
+                           style='width:100%'>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:20.55pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>学号：</span></p>
+                            </td>
+                            <td width=102 style='width:76.65pt;height:20.55pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="id" data-type="number"
+                                          th:text="${studentInfo.id}">201601010317</span>
+                                    <input type="hidden" name="id" th:value="${studentInfo.id}"/>
+                                </p>
+                            </td>
+                            <td width=65 style='width:49.0pt;height:20.55pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>姓名：</span></p>
+                            </td>
+                            <td width=169 style='width:126.7pt;height:20.55pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="name" data-type="text"
+                                          class="in_text" th:text="${studentInfo.name}">荆小余</span>
+                                </p>
+                            </td>
+                            <td width=121 rowspan=3 style='width:90.55pt; height:20.55pt' class="mdui-p-a-0"
+                                id="head_img">
+                                <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                <img id="show_img" th:src="${'/'+studentInfo.img}" alt="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:20.8pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>出生日期：</span></p>
+                            </td>
+                            <td width=102 style='width:76.65pt;height:20.8pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="birthday" class="in_date"
+                                          th:text="${#dates.format(studentInfo.birthday,'yyyy-MM-dd')}">1998-05-21</span>
+                                </p>
+                            </td>
+                            <td width=65 style='width:49.0pt;height:20.8pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>班主任：</span></p>
+                            </td>
+                            <td width=169 style='width:126.7pt;height:20.8pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="teacher" data-type="text" class="in_text"
+                                          th:text="${studentInfo.teacher}">于洪</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:21.15pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>性别：</span></p>
+                            </td>
+                            <td width=102 style='width:76.65pt;height:21.15pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="sex" class="in_radio"
+                                          th:text="${(studentInfo.sex)?'男':'女'}">女</span>
+                                </p>
+                            </td>
+                            <td width=65 style='width:49.0pt;height:21.15pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>班级：</span></p>
+                            </td>
+                            <td width=169 style='width:126.7pt;height:21.15pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><input type="hidden" name="clazz" th:value="${studentInfo.clazz.id}">
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="class" data-type="text"
+                                          th:text="${studentInfo.clazz.clazz}">1603</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:21.45pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>所属学院：</span></p>
+                            </td>
+                            <td width=102 style='width:76.65pt;height:21.45pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="college" data-type="text" class="in_text"
+                                          th:text="${studentInfo.college}">软件学院</span></p>
+                            </td>
+                            <td width=65 style='width:49.0pt;height:21.45pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>联系电话：</span></p>
+                            </td>
+                            <td colspan="2" width=169 style='width:126.7pt;height:21.45pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="tel" data-type="number" class="in_text"
+                                          th:text="${studentInfo.tel}">17645538869</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:21.0pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>所属专业：</span></p>
+                            </td>
+                            <td width=102 style='width:76.65pt;height:21.0pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
+                                    <span data-name="profession" data-type="text" class="in_text"
+                                          th:text="${studentInfo.profession}">软件工程</span></p>
+                            </td>
+                            <td width=65 style='width:49.0pt;height:21.0pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>家长电话：</span></p>
+                            </td>
+                            <td colspan="2" width=169 style='width:126.7pt;height:21.0pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/--><span
+                                        data-name="htel" data-type="number"
+                                        class="in_text" th:text="${studentInfo.htel}">17645537796</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:20.55pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>入学时间：</span></p>
+                            </td>
+                            <td width=102 style='width:76.65pt;height:20.55pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/--><span
+                                        data-name="intime"
+                                        class="in_date_dd" th:text="${#dates.format(studentInfo.intime,'yyyy-MM')}">2016-07</span>
+                                </p>
+                            </td>
+                            <td width=65 style='width:49.0pt;height:20.55pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>是否在籍：</span></p>
+                            </td>
+                            <td width=290 colspan=2 style='width:217.25pt;height:20.55pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/--><span
+                                        data-name="isin"
+                                        class="in_switch" th:text="${(studentInfo.isin)?'是':'否'}">否</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:20.6pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>班内职务：</span></p>
+                            </td>
+                            <td width=336 colspan=4 style='width:252.35pt;height:20.6pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/--><span
+                                        data-name="position" data-type="text"
+                                        class="in_text" th:text="${studentInfo.position}">班长</span></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:23.6pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'><span style='font-size:9.0pt'>家庭地址：</span></p>
+                            </td>
+                            <td width=457 colspan=4 style='width:342.9pt;height:23.6pt' class="mdui-p-a-0">
+                                <p align=center style='text-align:center'>
+                                    <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/--><span
+                                        data-name="address" data-type="text"
+                                        class="in_text" th:text="${studentInfo.address}">黑龙江省大庆市大庆区大庆先五一村二组168号</span>
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width=66 style='width:49.5pt;height:23.6pt' class="mdui-p-a-0">
+                                <p><span style='font-size:9.0pt'>备注：</span></p>
+                            </td>
+                            <td width=457 colspan=4 style='width:342.9pt;height:23.6pt' class="mdui-p-a-0">
+                                <p><!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/--><span
+                                        data-name="remarks" data-type="text" style='font-size:9.0pt' class="in_text"
+                                        th:text="${studentInfo.remarks}">备注</span>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- <button onclick="down_doc_btn()" class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i
+             class="mdui-icon material-icons">file_download</i></button>-->
+    <div class="mdui-fab-wrapper" id="exampleFab" mdui-fab="{trigger: 'hover'}">
+        <button class="mdui-fab mdui-ripple mdui-color-theme-accent">
+            <i class="mdui-icon material-icons">add</i>
+            <i class="mdui-icon mdui-fab-opened material-icons">add</i>
+        </button>
+        <div class="mdui-fab-dial">
+            <button onclick="down_doc_btn()" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-theme-accent group_1">
+                <i class="mdui-icon material-icons">cloud_download</i>
+            </button>
+            <button onclick="edit_doc_btn()" class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-theme-accent group_1">
+                <i class="mdui-icon material-icons">mode_edit</i></button>
+
+            <button onclick="done_doc_btn()"
+                    class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-theme-accent mdui-hidden group_2"><i
+                    class="mdui-icon material-icons">done</i></button>
+            <button onclick="clear_doc_btn()"
+                    class="mdui-fab mdui-fab-mini mdui-ripple mdui-color-theme-accent mdui-hidden group_2"><i
+                    class="mdui-icon material-icons">clear</i></button>
+        </div>
+    </div>
+</section>
+<script th:src="@{/lib_web/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/lib_web/mdui/js/mdui.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/lib_web/datepicker/WdatePicker.js}"></script>
+<script>
+    'use strict';
+    var $group1 = $('.group_1');
+    var $group2 = $('.group_2');
+
+    /*修改按钮*/
+    function edit_doc_btn() {
+        $('.in_text').each(function () {
+            $(this).replaceWith('<div class="mdui-textfield"><input class="mdui-textfield-input" name="' + $(this).data('name') + '" value="' + $(this).html() + '" type="' + $(this).data('type') + '" placeholder="请填写此字段"/></div>');
+        });
+        $('.in_date').each(function () {
+            $(this).replaceWith('<input class="mdui-textfield-input" name="' + $(this).data('name') + '" value="' + $(this).html() + '" type="text" readonly="readonly" onfocus="WdatePicker({skin:\'twoer\',dateFmt:\'yyyy-MM-dd\',maxDate:\'%y-%M-%d\',vel:' + $(this).data('name') + ',startDate:' + $(this).html() + '})"/><input id="' + $(this).data('name') + '" name="' + $(this).data('name') + '" type="text" class="mdui-hidden">');
+        });
+        $('.in_date_dd').each(function () {
+            $(this).replaceWith('<input readonly="readonly" value="' + $(this).html() + '" class="mdui-textfield-input" type="text" maxlength="10" onfocus="WdatePicker({skin:\'twoer\',dateFmt:\'yyyy年MM月\',vel:\'indate\'})" required="required"/><input id="indate" name="intime" type="text" class="mdui-hidden" value="' + $(this).html() + '-01' + '" required="required"/>');
+        });
+        $('.in_radio').each(function () {
+            if ($(this).html() === '男') {
+                $(this).replaceWith('<label class="mdui-radio"><input value="1" type="radio" name="sex" checked/><i class="mdui-radio-icon"></i>男</label><label class="mdui-radio"><input value="0" type="radio" name="sex"/><i class="mdui-radio-icon"></i>女</label>');
+            } else {
+                $(this).replaceWith('<label class="mdui-radio"><input value="1" type="radio" name="sex"/><i class="mdui-radio-icon"></i>男</label><label class="mdui-radio"><input value="0" type="radio" name="sex" checked/><i class="mdui-radio-icon"></i>女</label>');
+            }
+        });
+        $('.in_switch').each(function () {
+            if ($(this).html() === '是') {
+                $(this).replaceWith('<label class="mdui-switch"><input name="isin" type="checkbox" checked/><i class="mdui-switch-icon"></i></label>');
+            } else {
+                $(this).replaceWith('<label class="mdui-switch"><input name="isin" type="checkbox"/><i class="mdui-switch-icon"></i></label>');
+            }
+
+        });
+        var $headImg = $('#head_img');
+        $headImg.html('<img id="show_img" src="' + $headImg.find('img').attr("src") + '" alt="" style="z-index: 1"><label class="mdui-btn mdui-ripple mdui-color-theme-accent" for="xFile"><span id="file_name"></span>修改头像</label><input type="file" name="file" id="xFile" onchange="changImg(event)" style="position:absolute;clip:rect(0 0 0 0);" accept="image/*">');
+        $group1.addClass('mdui-hidden');
+        $group2.removeClass('mdui-hidden');
+    }
+
+    /*下载按钮*/
+    function down_doc_btn() {
+
+    }
+
+    /*修改完成*/
+    function done_doc_btn() {
+        $('#edit_form').submit();
+        $group1.removeClass('mdui-hidden');
+        $group2.addClass('mdui-hidden');
+    }
+
+    /*取消修改*/
+    function clear_doc_btn() {
+        window.location.reload();
+    }
+
+    /*图片回显*/
+    function changImg(e) {
+        for (var i = 0; i < e.target.files.length; i++) {
+            var file = e.target.files.item(i);
+            if (!(/^image\/.*$/i.test(file.type))) {
+                continue; //不是图片 就跳出这一次循环
+            }
+            //实例化FileReader API
+            var freader = new FileReader();
+            freader.readAsDataURL(file);
+            freader.onload = function (e) {
+                $("#show_img").attr("src", e.target.result);
+            }
+        }
+    }
+</script>
+</body>
+</html>
