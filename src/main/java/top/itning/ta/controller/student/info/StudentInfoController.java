@@ -148,7 +148,6 @@ public class StudentInfoController {
     @RequestMapping(value = "/modify/student", method = RequestMethod.POST)
     public String modifyStudentInfo(StudentInfo studentInfo, @RequestParam("file") MultipartFile file) throws NullParameterException {
         studentInfoService.addStudentInfo(studentInfo, file);
-        System.out.println(studentInfo);
         return "redirect:/studentInfo/show/student/" + studentInfo.getId();
     }
 
@@ -175,5 +174,14 @@ public class StudentInfoController {
         studentInfoService.downStudentInfo(outputStream, idArray);
         outputStream.flush();
         outputStream.close();
+    }
+
+    @RequestMapping(value = "/upExcelFile", method = RequestMethod.POST)
+    public String upExcelFile(@RequestParam("file") MultipartFile file) throws NullParameterException, DataNotFindException, IOException {
+        if (file.isEmpty()) {
+            throw new NullParameterException("file为空");
+        }
+        studentInfoService.addStudentInfoByExcel(file);
+        return "redirect:/";
     }
 }

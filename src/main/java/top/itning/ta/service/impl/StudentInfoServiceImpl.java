@@ -1,5 +1,7 @@
 package top.itning.ta.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -23,8 +25,10 @@ import javax.servlet.ServletOutputStream;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +39,15 @@ import java.util.List;
 @Service
 @Transactional(rollbackOn = Exception.class)
 public class StudentInfoServiceImpl implements StudentInfoService {
+    /**
+     * xlsx mime type
+     */
+    private static final String MIME_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    /**
+     * xls mime type
+     */
+    private static final String MIME_XLS = "application/vnd.ms-excel";
+
     @Value("${spring.http.multipart.location}")
     private String uploadPath;
 
@@ -227,5 +240,87 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         }
         workbook.write(servletOutputStream);
         workbook.close();
+    }
+
+    @Override
+    public void addStudentInfoByExcel(MultipartFile file) throws NullParameterException, DataNotFindException, IOException {
+        if (file.isEmpty()) {
+            throw new NullParameterException("file参数为空");
+        }
+        String contentType = file.getContentType();
+        Workbook workbook;
+        if (MIME_XLSX.equals(contentType)) {
+            workbook = new XSSFWorkbook(file.getInputStream());
+        } else if (MIME_XLS.equals(contentType)) {
+            workbook = new HSSFWorkbook(file.getInputStream());
+        } else {
+            throw new IllegalArgumentException("文件类型不正确:" + contentType);
+        }
+        Sheet sheetAt = workbook.getSheetAt(0);
+        List<StudentInfo> studentInfoList = new ArrayList<>();
+        for (int i = 1; i <= sheetAt.getLastRowNum(); i++) {
+            Row row = sheetAt.getRow(i);
+            String id = getCellValue(row.getCell(0));
+            String name = getCellValue(row.getCell(1));
+            String sex = getCellValue(row.getCell(2));
+            String birthday = getCellValue(row.getCell(3));
+            String tel = getCellValue(row.getCell(4));
+            String htel = getCellValue(row.getCell(5));
+            String intime = getCellValue(row.getCell(6));
+            String isin = getCellValue(row.getCell(7));
+            String position = getCellValue(row.getCell(8));
+            String teacher = getCellValue(row.getCell(9));
+            String clazz = getCellValue(row.getCell(10));
+            String address = getCellValue(row.getCell(11));
+            String college = getCellValue(row.getCell(12));
+            String profession = getCellValue(row.getCell(13));
+            String remarks = getCellValue(row.getCell(14));
+            //检查非空字段
+            if (StringUtils.isAnyEmpty(id, name, sex, birthday, tel, htel, intime, isin, teacher, clazz, address, college, profession)) {
+                continue;
+            }
+            List<Clazz> clazzList = clazzDao.findByClazz(clazz);
+            if (clazzList.size() == 0) {
+                continue;
+            }
+            StudentInfo studentInfo = new StudentInfo();
+            try {
+                Date birthdayDate = new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
+                Date inttimeDate = new SimpleDateFormat("yyyy-MM").parse(intime);
+                studentInfo.setBirthday(birthdayDate);
+                studentInfo.setIntime(inttimeDate);
+            } catch (ParseException e) {
+                continue;
+            }
+            if (position != null) {
+                studentInfo.setPosition(position);
+            }
+            if (remarks != null) {
+                studentInfo.setRemarks(remarks);
+            }
+
+            studentInfo.setAddress(address);
+            studentInfo.setClazz(clazzList.get(0));
+            studentInfo.setCollege(college);
+            studentInfo.setHtel(htel);
+            studentInfo.setTel(tel);
+            studentInfo.setTeacher(teacher);
+            studentInfo.setProfession(profession);
+            studentInfo.setId(id);
+            studentInfo.setName(name);
+            System.out.println(studentInfo);
+            studentInfoList.add(studentInfo);
+        }
+        studentInfoList.forEach(studentInfoDao::saveAndFlush);
+    }
+
+    private String getCellValue(Cell cell) {
+        String stringCellValue = null;
+        try {
+            stringCellValue = cell.getStringCellValue();
+        } catch (NullPointerException e) {
+            e.getMessage();
+        }
+        return stringCellValue;
     }
 }

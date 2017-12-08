@@ -70,4 +70,14 @@ public interface StudentInfoService {
      * @throws IOException          文件操作出错抛出该异常
      */
     void downStudentInfo(ServletOutputStream servletOutputStream, String... id) throws DataNotFindException, IOException;
+
+    /**
+     * 使用Excel文件添加学生信息
+     *
+     * @param file Excel文件
+     * @throws NullParameterException 文件为空则抛出该异常
+     * @throws DataNotFindException   班级没有找到则抛出该异常
+     * @throws IOException            文件读写失败抛出该异常
+     */
+    void addStudentInfoByExcel(MultipartFile file) throws NullParameterException, DataNotFindException, IOException;
 }
