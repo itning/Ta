@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,9 +14,9 @@
     <title>查询请假信息-教师助手-Teacher Assistant</title>
 
     <!--mdui css-->
-    <link href="lib_web/mdui/css/mdui.min.css" rel="stylesheet">
+    <link th:href="@{/lib_web/mdui/css/mdui.min.css}" rel="stylesheet">
 
-    <link href="css/common.css" rel="stylesheet">
+    <link th:href="@{/css/common.css}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -43,7 +43,7 @@
 
 <nav class="mdui-drawer mdui-card" id="left-drawer">
     <div class="mdui-card-media">
-        <img src="image/card.jpg"/>
+        <img th:src="@{/image/card.jpg}"/>
         <div class="mdui-card-media-covered">
             <div class="mdui-card-primary">
                 <div class="mdui-card-primary-title">舒露</div>
@@ -52,21 +52,23 @@
         </div>
     </div>
     <ul class="mdui-list mdui-card-content" mdui-collapse="{accordion: true}">
-        <li class="mdui-collapse-item">
+        <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
                 <div class="mdui-list-item-content">学生信息管理</div>
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
-            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
-                <li class="mdui-list-item mdui-ripple"><a href="#">1601班</a></li>
-                <li class="mdui-list-item mdui-ripple"><a href="#">1602班</a></li>
-                <li class="mdui-list-item mdui-ripple"><a href="#">1603班</a></li>
-                <li class="mdui-list-item mdui-ripple"><a href="#">1604班</a></li>
-            </ul>
+            <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+            <div th:each="clazz : ${classList} " class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <!--/*@thymesVar id="clazz" type="top.itning.ta.entity.Clazz"*/-->
+                <!--/*@thymesVar id="id" type="java.lang.String"*/-->
+                <a th:id="${clazz.id}" th:href="${'#/'+clazz.id}" th:text="${clazz.clazz}"
+                   class="mdui-list-item mdui-ripple">1602班</a>
+            </div>
         </li>
 
-        <li class="mdui-collapse-item mdui-collapse-item-open">
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item mdui-collapse-item-open">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
                 <div class="mdui-list-item-content">学生请假管理</div>
@@ -80,7 +82,7 @@
         </li>
         <li class="mdui-list-item mdui-ripple">
             <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
-            <a href="#" class="mdui-list-item-content">班级管理</a>
+            <a th:href="@{/class/show}" class="mdui-list-item-content">班级管理</a>
         </li>
         <li class="mdui-list-item mdui-ripple">
             <i class="mdui-list-item-icon mdui-icon material-icons">color_lens</i>
@@ -101,7 +103,7 @@
 </nav>
 <section class="mdui-container">
 
-    <form id="search_form" action="http://itning.top" method="get">
+    <form id="search_form" th:action="@{/studentLeave/searchLeave}" method="get">
         <div class="mdui-table-fluid">
             <table class="mdui-table" style="width: 100%">
                 <tr>
@@ -113,12 +115,12 @@
                         </div>
                     </td>
                     <td class="mdui-col-xs-2" style="width: 10%"><label class="mdui-radio">
-                        <input type="radio" name="type" data-id="a" checked/>
+                        <input type="radio" data-id="a" checked/>
                         <i class="mdui-radio-icon"></i>
                         姓名
                     </label>
                         <label class="mdui-radio">
-                            <input type="radio" name="type" data-id="b"/>
+                            <input type="radio" data-id="b"/>
                             <i class="mdui-radio-icon"></i>
                             学号
                         </label></td>
@@ -135,37 +137,37 @@
                            class="mdui-btn mdui-ripple"
                         >不限</a>
                         <label class="mdui-checkbox">
-                            <input type="checkbox"/>
+                            <input type="checkbox" name="often" value="0.5"/>
                             <i class="mdui-checkbox-icon"></i>
                             0.5
                         </label>
                         <label class="mdui-checkbox">
-                            <input type="checkbox"/>
+                            <input type="checkbox" name="often" value="1"/>
                             <i class="mdui-checkbox-icon"></i>
                             1天
                         </label>
                         <label class="mdui-checkbox">
-                            <input type="checkbox"/>
+                            <input type="checkbox" name="often" value="1.5"/>
                             <i class="mdui-checkbox-icon"></i>
                             1.5天
                         </label>
                         <label class="mdui-checkbox">
-                            <input type="checkbox"/>
+                            <input type="checkbox" name="often" value="2"/>
                             <i class="mdui-checkbox-icon"></i>
                             2天
                         </label>
                         <label class="mdui-checkbox">
-                            <input type="checkbox"/>
+                            <input type="checkbox" name="often" value="2.5"/>
                             <i class="mdui-checkbox-icon"></i>
                             2.5天
                         </label>
                         <label class="mdui-checkbox">
-                            <input type="checkbox"/>
+                            <input type="checkbox" name="often" value="3"/>
                             <i class="mdui-checkbox-icon"></i>
                             3天
                         </label>
                         <label class="mdui-checkbox">
-                            <input type="checkbox"/>
+                            <input type="checkbox" name="often" value="-1"/>
                             <i class="mdui-checkbox-icon"></i>
                             3天以上
                         </label>
@@ -191,20 +193,11 @@
                         <a href="javascript:clearChecked('matter')" style="margin-right: 30px"
                            class="mdui-btn mdui-ripple"
                         >不限</a>
-                        <label class="mdui-checkbox">
-                            <input type="checkbox"/>
+                        <!--/*@thymesVar id="leaveTypeList" type="java.util.List<top.itning.ta.entity.LeaveType>"*/-->
+                        <label class="mdui-checkbox" th:each="leaveType:${leaveTypeList}">
+                            <input type="checkbox" name="matter" th:value="${leaveType.id}"/>
                             <i class="mdui-checkbox-icon"></i>
-                            事假
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input type="checkbox"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            病假
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input type="checkbox"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            旷课
+                            <span th:text="${leaveType.name}"></span>
                         </label>
                     </td>
                 </tr>
@@ -214,55 +207,11 @@
                         <a href="javascript:clearChecked('class')" style="margin-right: 30px"
                            class="mdui-btn mdui-ripple"
                         >不限</a>
-                        <label class="mdui-checkbox">
-                            <input id="checkbox1" name="class" type="checkbox" value="1601"/>
+                        <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+                        <label class="mdui-checkbox" th:each="clazz:${classList}">
+                            <input name="clazz" type="checkbox" th:value="${clazz.id}"/>
                             <i class="mdui-checkbox-icon"></i>
-                            1601班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1601"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1602班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1601"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1603班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1602"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1603班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1603"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1603班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1604"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1603班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1605"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1603班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1606"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1603班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1607"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1603班
-                        </label>
-                        <label class="mdui-checkbox">
-                            <input name="class" type="checkbox" value="1608"/>
-                            <i class="mdui-checkbox-icon"></i>
-                            1603班
+                            <span th:text="${clazz.clazz}"></span>
                         </label>
                     </td>
                 </tr>
@@ -272,10 +221,10 @@
     <div class="mdui-typo">
         <hr/>
     </div>
-    <div class="mdui-progress">
+    <div class="mdui-progress mdui-hidden" id="loading_progress">
         <div class="mdui-progress-indeterminate"></div>
     </div>
-    <div class="mdui-table-fluid">
+    <div class="mdui-table-fluid data-table mdui-hidden">
         <table id="result" class="mdui-table mdui-table-selectable mdui-table-hoverable">
             <thead>
             <tr>
@@ -288,20 +237,10 @@
                 <th>备注</th>
             </tr>
             </thead>
-            <tbody>
-            <tr data-id="asdads">
-                <td><a href="#" target="_blank" class="">201601010301</a></td>
-                <td>荆小余</td>
-                <td>2016-05-30</td>
-                <td>3</td>
-                <td>事假</td>
-                <td>回家</td>
-                <td>无</td>
-            </tr>
-            </tbody>
+            <tbody id="table_data"></tbody>
         </table>
     </div>
-    <div class="mdui-card">
+    <div class="mdui-card data-table mdui-hidden">
         <div class="mdui-card-content">
             <button id="down_select_btn" onclick="down_select()"
                     class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" disabled>选中下载
@@ -312,13 +251,24 @@
         </div>
     </div>
 </section>
-<script src="lib_web/jquery/jquery-3.2.1.min.js"></script>
-<script src="lib_web/mdui/js/mdui.min.js"></script>
-<script src="js/common.js"></script>
-<script src="lib_web/datepicker/WdatePicker.js"></script>
+<script th:src="@{/lib_web/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/lib_web/mdui/js/mdui.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/lib_web/datepicker/WdatePicker.js}"></script>
 <script>
     'use strict';
     $(function () {
+        $("input[type=radio]").change(function () {
+            var $showInfo = $('#show_info');
+            if ($(this).data('id') === 'a') {
+                $showInfo.html("请输入要查询的姓名");
+            } else {
+                $showInfo.html("请输入要查询的学号");
+            }
+        });
+    });
+
+    function after() {
         /*根据复选框是否选中设置按钮是否可用*/
         $('#result .mdui-checkbox input:checkbox').click(function () {
             var $downSelectBtn = $('#down_select_btn');
@@ -331,27 +281,47 @@
                 $delSelectBtn.attr("disabled", "disabled");
             }
         });
-
-        $("input[type=radio]").change(function () {
-            var $showInfo = $('#show_info');
-            if ($(this).data('id') === 'a') {
-                $showInfo.html("请输入要查询的姓名");
-            } else {
-                $showInfo.html("请输入要查询的学号");
-            }
-
-
-        });
-    });
-
+    }
 
     /*取消选择*/
     function clearChecked(id) {
         $('#' + id).find("input[type=checkbox]").prop('checked', false);
     }
 
+    //进度条状态
+    function progressStatus(b) {
+        var $loadingProgress = $("#loading_progress");
+        if (b) {
+            $loadingProgress.removeClass("mdui-hidden");
+        } else {
+            $loadingProgress.addClass("mdui-hidden");
+        }
+    }
+
+    function show_tables(b) {
+        var $data = $('.data-table');
+        if (b) {
+            $data.removeClass("mdui-hidden");
+        } else {
+            $data.addClass("mdui-hidden");
+        }
+    }
+
     function search() {
-        $('#search_form').submit();
+        progressStatus(true);
+        show_tables(false);
+        $.get('/studentLeave/searchLeave?' + $('#search_form').serialize(), function (data) {
+            $("#table_data").html("");
+            if(data.length!==0){
+                $.each(data, function (i, n) {
+                    $("#table_data").append("<tr data-id='" + n.id + "'><td><a href=\"#\" target=\"_blank\" class=\"\">" + n.sid.id + "</a></td><td>" + n.sid.name + "</td><td>" + n.starttime + "</td><td>" + n.often + "</td><td>" + n.matter.name + "</td><td>" + n.reason + "</td><td>" + n.remarks + "</td></tr>");
+                });
+                show_tables(true);
+                mdui.updateTables();
+                after();
+            }
+            progressStatus(false);
+        });
     }
 </script>
 </body>

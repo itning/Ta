@@ -1,5 +1,6 @@
 package top.itning.ta.service;
 
+import top.itning.ta.entity.SearchLeave;
 import top.itning.ta.entity.StudentLeave;
 import top.itning.ta.exception.DataNotFindException;
 import top.itning.ta.exception.NullParameterException;
@@ -34,4 +35,12 @@ public interface StudentLeaveService {
      * @throws NullParameterException 如果学生请假信息有字段为空则抛出该异常
      */
     void addStudentLeaveInfo(StudentLeave studentLeave) throws NullParameterException;
+
+    /**
+     * 搜索请假信息
+     *
+     * @param searchLeave 请假信息
+     * @return 学生请假信息集合
+     */
+    List<StudentLeave> searchStudentLeaveInfo(SearchLeave searchLeave);
 }

@@ -1,5 +1,7 @@
 package top.itning.ta.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,7 +17,12 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "LEAVE_TYPE")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class LeaveType implements Serializable {
+    /*
+      @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+      https://stackoverflow.com/questions/24994440/no-serializer-found-for-class-org-hibernate-proxy-pojo-javassist-javassist
+     */
     /**
      * UUID
      */

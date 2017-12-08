@@ -1,6 +1,7 @@
 package top.itning.ta.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import top.itning.ta.entity.StudentInfo;
 import top.itning.ta.entity.StudentLeave;
 
@@ -9,7 +10,7 @@ import top.itning.ta.entity.StudentLeave;
  *
  * @author wangn
  */
-public interface StudentLeaveDao extends JpaRepository<StudentLeave, String> {
+public interface StudentLeaveDao extends JpaRepository<StudentLeave, String>, JpaSpecificationExecutor<StudentLeave> {
     /**
      * 根据学生ID删除所有请假信息
      *

@@ -44,4 +44,12 @@ public interface StudentInfoDao extends JpaRepository<StudentInfo, String> {
      * @param clazz 班级
      */
     void deleteAllByClazz(Clazz clazz);
+
+    /**
+     * 根据学生姓名查询学生信息(like %name%)
+     *
+     * @param name 学生姓名
+     * @return 学生信息集合
+     */
+    List<StudentInfo> findByNameContaining(String name);
 }

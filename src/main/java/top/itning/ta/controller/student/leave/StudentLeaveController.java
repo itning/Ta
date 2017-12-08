@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
+import top.itning.ta.entity.SearchLeave;
 import top.itning.ta.entity.ServerMessage;
 import top.itning.ta.entity.StudentLeave;
 import top.itning.ta.exception.DataNotFindException;
@@ -18,6 +19,7 @@ import top.itning.ta.service.StudentLeaveService;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 学生请假控制器
@@ -85,7 +87,12 @@ public class StudentLeaveController {
         return serverMessage;
     }
 
-
+    /**
+     * 添加学生信息页面
+     *
+     * @param model 模型
+     * @return addleave.html
+     */
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addStudentLeaveInfoRoute(Model model) {
         model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
@@ -111,4 +118,30 @@ public class StudentLeaveController {
         studentLeaveService.addStudentLeaveInfo(studentLeave);
         return "redirect:/studentLeave/show";
     }
+
+    /**
+     * 搜索请假信息页面
+     *
+     * @param model 模型
+     * @return searchleave.html
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String searchStudentLeave(Model model) {
+        model.addAttribute("classList", classManageService.getAllClassInfo());
+        model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
+        return "searchleave";
+    }
+
+    /**
+     * 搜索请假信息
+     *
+     * @param searchLeave 搜索请假信息
+     * @return 搜索的学生请假信息集合
+     */
+    @RequestMapping(value = "/searchLeave", method = RequestMethod.GET)
+    @ResponseBody
+    public List<StudentLeave> searchStudentLeaveInfo(SearchLeave searchLeave) {
+        return studentLeaveService.searchStudentLeaveInfo(searchLeave);
+    }
+
 }
