@@ -34,6 +34,16 @@ public class FrameWorkController {
     }
 
     /**
+     * 登陆页面
+     *
+     * @return login.html
+     */
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    /**
      * 页面框架初始化
      *
      * @param model 模型

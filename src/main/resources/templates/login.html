@@ -37,6 +37,8 @@
     </div>
     <div class="mdui-card-content">
         <form id="login_form" th:action="@{/login}" method="post">
+            <!--/*@thymesVar id="param" type="java.lang.String"*/-->
+            <p th:if="${session.SPRING_SECURITY_LAST_EXCEPTION!=null}">用户名/密码错误</p>
             <div class="mdui-textfield mdui-textfield-floating-label">
                 <label class="mdui-textfield-label">用户名</label>
                 <input name="username" class="mdui-textfield-input" type="text" maxlength="10"/>
@@ -48,8 +50,9 @@
                 <div class="mdui-textfield-error">密码不能为空</div>
             </div>
             <div class="mdui-card-actions" style="top: 20px;">
-                <input  type="submit"
-                       class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme mdui-btn-block" value="登陆"><!--onclick="submit_btn()"-->
+                <input type="button" onclick="submit_btn()"
+                       class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme mdui-btn-block" value="登陆">
+
             </div>
         </form>
     </div>
