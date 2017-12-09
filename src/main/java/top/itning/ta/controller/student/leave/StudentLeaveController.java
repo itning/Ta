@@ -66,7 +66,12 @@ public class StudentLeaveController {
     @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/show", method = RequestMethod.GET)
     public String getAllStudentLeaveInfo(Model model) {
-        model.addAttribute("studentLeaveList", studentLeaveService.getAllStudentLeave());
+        List<StudentLeave> studentLeaveList = studentLeaveService.getAllStudentLeave();
+        if (studentLeaveList.size() == 0) {
+            logger.info("getAllStudentLeaveInfo::学生请假信息为空,重定向到添加页面");
+            return "redirect:/studentLeave/add";
+        }
+        model.addAttribute("studentLeaveList", studentLeaveList);
         model.addAttribute("classList", classManageService.getAllClassInfo());
         logger.debug("getAllStudentLeaveInfo::studentLeaveList/classList添加完成");
         return "historyleave";
@@ -142,6 +147,10 @@ public class StudentLeaveController {
     @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchStudentLeave(Model model) {
+        if (studentLeaveService.getStudentLeaveNum() == 0) {
+            logger.info("searchStudentLeave::学生请假信息为空,重定向到添加页面");
+            return "redirect:/studentLeave/add";
+        }
         model.addAttribute("classList", classManageService.getAllClassInfo());
         model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
         logger.debug("searchStudentLeave::leaveTypeList/classList添加完成");

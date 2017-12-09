@@ -296,31 +296,33 @@ public class StudentInfoServiceImpl implements StudentInfoService {
             Sheet sheetAt = workbook.getSheetAt(index);
             logger.debug("addStudentInfoByExcel::获取到最后的行数->" + sheetAt.getLastRowNum());
             for (int i = 1; i <= sheetAt.getLastRowNum(); i++) {
-                logger.debug("addStudentInfoByExcel::开始获取第->" + i + "列");
+                logger.debug("addStudentInfoByExcel::开始获取第" + i + "行");
                 Row row = sheetAt.getRow(i);
-                String id = getCellValue(row.getCell(0));
-                String name = getCellValue(row.getCell(1));
-                String sex = getCellValue(row.getCell(2));
-                String birthday = getCellValue(row.getCell(3));
-                String tel = getCellValue(row.getCell(4));
-                String htel = getCellValue(row.getCell(5));
-                String intime = getCellValue(row.getCell(6));
-                String isin = getCellValue(row.getCell(7));
-                String position = getCellValue(row.getCell(8));
-                String teacher = getCellValue(row.getCell(9));
-                String clazz = getCellValue(row.getCell(10));
-                String address = getCellValue(row.getCell(11));
-                String college = getCellValue(row.getCell(12));
-                String profession = getCellValue(row.getCell(13));
-                String remarks = getCellValue(row.getCell(14));
+                String id = getCellValue(row, 0);
+                String name = getCellValue(row, 1);
+                String sex = getCellValue(row, 2);
+                String birthday = getCellValue(row, 3);
+                String tel = getCellValue(row, 4);
+                String htel = getCellValue(row, 5);
+                String intime = getCellValue(row, 6);
+                String isin = getCellValue(row, 7);
+                String position = getCellValue(row, 8);
+                String teacher = getCellValue(row, 9);
+                String clazz = getCellValue(row, 10);
+                String address = getCellValue(row, 11);
+                String college = getCellValue(row, 12);
+                String profession = getCellValue(row, 13);
+                String remarks = getCellValue(row, 14);
                 //检查非空字段
                 if (StringUtils.isAnyEmpty(id, name, sex, birthday, tel, htel, intime, isin, teacher, clazz, address, college, profession)) {
                     logger.info("addStudentInfoByExcel::非空字段有空值,已跳过本次循环");
+                    logger.warn("第" + (i + 1) + "行数据不正确->非空字段有空值");
                     continue;
                 }
                 List<Clazz> clazzList = clazzDao.findByClazz(clazz);
                 if (clazzList.size() == 0) {
                     logger.info("addStudentInfoByExcel::根据" + clazz + "没有获取到班级,跳过本次循环");
+                    logger.warn("第" + (i + 1) + "行数据不正确->根据" + clazz + "没有获取到班级");
                     continue;
                 }
                 StudentInfo studentInfo = new StudentInfo();
@@ -332,6 +334,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
                     studentInfo.setIntime(inttimeDate);
                 } catch (ParseException e) {
                     logger.info("addStudentInfoByExcel::日期格式化出错->" + e.getMessage());
+                    logger.warn("第" + (i + 1) + "行数据不正确->日期格式化出错->" + e.getMessage());
                     continue;
                 }
                 if (position != null) {
@@ -350,6 +353,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
                 studentInfo.setProfession(profession);
                 studentInfo.setId(id);
                 studentInfo.setName(name);
+                logger.debug("addStudentInfoByExcel::第" + i + "行学生信息->" + studentInfo);
                 studentInfoList.add(studentInfo);
             }
         }
@@ -361,13 +365,35 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         }
     }
 
-    private String getCellValue(Cell cell) {
+    private String getCellValue(Row row, int cellNum) {
         String stringCellValue = null;
-        try {
-            stringCellValue = cell.getStringCellValue();
-        } catch (NullPointerException e) {
-            logger.debug("getCellValue::cell->" + cell.getColumnIndex() + "->" + e.getMessage());
-            e.getMessage();
+        Cell cell;
+        if ((cell = row.getCell(cellNum)) != null) {
+            try {
+                stringCellValue = cell.getStringCellValue();
+            } catch (IllegalStateException e) {
+                logger.info("getCellValue::CellNum->" + cellNum + "<-尝试获取String类型数据失败");
+                try {
+                    logger.info("getCellValue::CellNum->" + cellNum + "<-尝试获取Double类型数据");
+                    stringCellValue = String.valueOf(cell.getNumericCellValue());
+                } catch (IllegalStateException e1) {
+                    try {
+                        logger.info("getCellValue::CellNum->" + cellNum + "<-尝试获取Boolean类型数据");
+                        stringCellValue = String.valueOf(cell.getBooleanCellValue());
+                    } catch (IllegalStateException e2) {
+                        try {
+                            logger.info("getCellValue::CellNum->" + cellNum + "<-尝试获取Date类型数据");
+                            stringCellValue = String.valueOf(cell.getDateCellValue());
+                        } catch (IllegalStateException e3) {
+                            logger.warn("getCellValue::CellNum->" + cellNum + "<-未知类型数据->" + e3.getMessage());
+                        }
+                    }
+                }
+            } finally {
+                logger.debug("getCellValue::第" + cellNum + "格获取到的数据为->" + stringCellValue);
+            }
+        } else {
+            logger.debug("getCellValue::第" + cellNum + "格为空");
         }
         return stringCellValue;
     }

@@ -186,4 +186,9 @@ public class StudentLeaveServiceImpl implements StudentLeaveService {
             return cb.and(list.toArray(p));
         });
     }
+
+    @Override
+    public long getStudentLeaveNum() {
+        return studentLeaveDao.count();
+    }
 }

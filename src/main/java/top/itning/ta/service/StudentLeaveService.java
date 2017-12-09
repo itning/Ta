@@ -43,4 +43,11 @@ public interface StudentLeaveService {
      * @return 学生请假信息集合
      */
     List<StudentLeave> searchStudentLeaveInfo(SearchLeave searchLeave);
+
+    /**
+     * 获得学生的请假数量信息
+     *
+     * @return 学生请假数
+     */
+    long getStudentLeaveNum();
 }
