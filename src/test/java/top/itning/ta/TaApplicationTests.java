@@ -1,11 +1,5 @@
 package top.itning.ta;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +9,11 @@ import top.itning.ta.dao.ClazzDao;
 import top.itning.ta.dao.LeaveTypeDao;
 import top.itning.ta.dao.StudentInfoDao;
 import top.itning.ta.dao.StudentLeaveDao;
-import top.itning.ta.entity.Clazz;
-import top.itning.ta.entity.LeaveType;
-import top.itning.ta.entity.StudentInfo;
-import top.itning.ta.entity.StudentLeave;
 
-import java.io.*;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Random;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -47,7 +38,7 @@ public class TaApplicationTests {
 
     @Test
     public void testStudentInfo() {
-        String uuid = UUID.randomUUID().toString().replace("-", "");
+       /* String uuid = UUID.randomUUID().toString().replace("-", "");
         List<Clazz> clazzList = clazzDao.findAll();
         int i = 0;
         while (true) {
@@ -72,12 +63,12 @@ public class TaApplicationTests {
             if (i == 500) {
                 break;
             }
-        }
+        }*/
     }
 
     @Test
     public void testStudentLeave() throws InterruptedException {
-        List<LeaveType> leaveTypeList = leaveTypeDao.findAll();
+       /* List<LeaveType> leaveTypeList = leaveTypeDao.findAll();
         List<StudentInfo> studentInfoList = studentInfoDao.findAll();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         int i = 0;
@@ -96,7 +87,7 @@ public class TaApplicationTests {
             if (i == 100) {
                 break;
             }
-        }
+        }*/
     }
 
     /**
@@ -144,7 +135,7 @@ public class TaApplicationTests {
 
     @Test
     public void testDown() throws IOException {
-        Clazz clazz = clazzDao.findOne("c54794e1-e1f6-4b9b-80bf-9f15d12e1119");
+        /*Clazz clazz = clazzDao.findOne("c54794e1-e1f6-4b9b-80bf-9f15d12e1119");
         List<StudentInfo> studentInfoList = studentInfoDao.findAllByClazz(clazz);
         studentInfoList.forEach(System.out::println);
         Workbook workbook = new XSSFWorkbook();
@@ -224,14 +215,14 @@ public class TaApplicationTests {
         FileOutputStream fileOutputStream = new FileOutputStream(new File("C:/Users/Ning/Desktop/test.xlsx"));
         workbook.write(fileOutputStream);
         fileOutputStream.close();
-        workbook.close();
+        workbook.close();*/
     }
 
     @Test
     public void testString() {
-        String str = "1017322085-1020145467-1037459874-1045385098-1079119260-1080062371-1086758172";
+       /* String str = "1017322085-1020145467-1037459874-1045385098-1079119260-1080062371-1086758172";
         String[] split = StringUtils.split(str, "-");
         System.out.println(split.length);
-        System.out.println(Arrays.toString(split));
+        System.out.println(Arrays.toString(split));*/
     }
 }
