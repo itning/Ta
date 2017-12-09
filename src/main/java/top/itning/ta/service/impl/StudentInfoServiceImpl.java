@@ -7,6 +7,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ import java.util.List;
 @Service
 @Transactional(rollbackOn = Exception.class)
 public class StudentInfoServiceImpl implements StudentInfoService {
+    private static final Logger logger = LoggerFactory.getLogger(StudentInfoServiceImpl.class);
     /**
      * xlsx mime type
      */
@@ -68,6 +71,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     public List<StudentInfo> getAllStudentInfoByClass(String clazz) throws DataNotFindException {
         Clazz clazzInfo = clazzDao.findOne(clazz);
         if (clazzInfo == null) {
+            logger.warn("getAllStudentInfoByClass::班级ID:" + clazz + "没有找到");
             throw new DataNotFindException("班级ID:" + clazz + "没有找到");
         }
         return studentInfoDao.findAllByClazz(clazzInfo);
@@ -76,6 +80,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Override
     public StudentInfo getOneStudentInfoByID(String id) throws DataNotFindException {
         if (!studentInfoDao.exists(id)) {
+            logger.warn("getOneStudentInfoByID::ID:" + id + "的学生没有找到");
             throw new DataNotFindException("ID:" + id + "的学生没有找到");
         }
         return studentInfoDao.getOne(id);
@@ -85,6 +90,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     public Clazz getClassInfoByID(String id) throws DataNotFindException {
         Clazz clazz = clazzDao.findOne(id);
         if (clazz == null) {
+            logger.warn("getClassInfoByID::班级ID:" + id + "没有找到");
             throw new DataNotFindException("班级ID:" + id + "没有找到");
         }
         return clazz;
@@ -124,21 +130,28 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         }
         //有上传文件
         if (!file.isEmpty()) {
+            logger.debug("addStudentInfo::有上传文件");
             //获取文件扩展名
             String extensionName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            logger.debug("addStudentInfo::获取文件扩展名->" + extensionName);
             //用学号作为文件名
             String newFileName = studentInfo.getId() + extensionName;
+            logger.debug("addStudentInfo::新文件名->" + newFileName);
             studentInfo.setImg(newFileName);
             File newFile = new File(uploadPath + newFileName);
             try {
                 file.transferTo(newFile);
             } catch (IOException e) {
+                logger.warn("addStudentInfo::文件写入本地失败->" + e.getMessage());
                 //回滚
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
         } else {
+            logger.debug("addStudentInfo::无上传文件");
             if (studentInfoDao.exists(studentInfo.getId())) {
+                logger.debug("addStudentInfo::学生ID->" + studentInfo.getId() + "存在");
                 String img = studentInfoDao.findimgByID(studentInfo.getId());
+                logger.debug("addStudentInfo::查找到的学生Img->" + img);
                 if (img != null) {
                     studentInfo.setImg(img);
                 }
@@ -150,24 +163,30 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     @Override
     public void delStudentInfo(String id) throws DataNotFindException {
         if (!studentInfoDao.exists(id)) {
+            logger.warn("delStudentInfo::ID:" + id + "不存在");
             throw new DataNotFindException("ID:" + id + "不存在");
         }
         //先删除请假信息
+        logger.debug("delStudentInfo::开始删除请假信息->" + id);
         studentLeaveDao.deleteAllBySid(studentInfoDao.getOne(id));
+        logger.debug("delStudentInfo::请假信息已删除,开始删除学生信息->" + id);
         studentInfoDao.delete(id);
+        logger.debug("delStudentInfo::删除结束->" + id);
     }
 
     @Override
     public void downStudentInfo(ServletOutputStream servletOutputStream, String... id) throws DataNotFindException, IOException {
         for (String s : id) {
             if (!studentInfoDao.exists(s)) {
+                logger.warn("downStudentInfo::学生ID:" + s + "没有找到");
                 throw new DataNotFindException("学生ID:" + s + "没有找到");
             }
         }
         Workbook workbook = new XSSFWorkbook();
-        //创建工作簿 名:专业+班级
+        //创建工作簿
         Sheet sheet = workbook.createSheet();
         Row row = sheet.createRow(0);
+        logger.debug("downStudentInfo::准备标题数据");
         List<String> titleList = new ArrayList<>();
         titleList.add("学号");
         titleList.add("姓名");
@@ -184,15 +203,21 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         titleList.add("学院");
         titleList.add("专业");
         titleList.add("备注");
+        logger.debug("downStudentInfo::标题数据集合大小->" + titleList.size());
         final int[] nowCell = {0};
+        logger.debug("downStudentInfo::开始写入标题数据");
         titleList.forEach(s -> {
             Cell cell = row.createCell(nowCell[0]++);
+            logger.debug("downStudentInfo::已创建Cell->" + (nowCell[0] - 1));
             cell.setCellValue(s);
+            logger.debug("downStudentInfo::写入标题数据->" + s);
         });
         nowCell[0] = 1;
         for (String s : id) {
             StudentInfo studentInfo = studentInfoDao.findOne(s);
             Row dataRow = sheet.createRow(nowCell[0]++);
+            logger.debug("downStudentInfo::已创建Cell->" + (nowCell[0] - 1));
+            logger.debug("downStudentInfo::开始写入");
             Cell idcell = dataRow.createCell(0);
             idcell.setCellValue(studentInfo.getId());
 
@@ -237,29 +262,41 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
             Cell remarkscell = dataRow.createCell(13);
             remarkscell.setCellValue(studentInfo.getRemarks());
+            logger.debug("downStudentInfo::结束写入");
         }
         workbook.write(servletOutputStream);
+        logger.debug("downStudentInfo::workbook写入到输出流完成");
         workbook.close();
+        logger.debug("downStudentInfo::workbook已关闭");
     }
 
     @Override
     public void addStudentInfoByExcel(MultipartFile file) throws NullParameterException, DataNotFindException, IOException {
         if (file.isEmpty()) {
+            logger.warn("addStudentInfoByExcel::file为空");
             throw new NullParameterException("file参数为空");
         }
         String contentType = file.getContentType();
+        logger.debug("addStudentInfoByExcel::获取到文件MIME类型->" + contentType);
         Workbook workbook;
         if (MIME_XLSX.equals(contentType)) {
+            logger.debug("addStudentInfoByExcel::创建xlsx类型");
             workbook = new XSSFWorkbook(file.getInputStream());
         } else if (MIME_XLS.equals(contentType)) {
+            logger.debug("addStudentInfoByExcel::创建xls类型");
             workbook = new HSSFWorkbook(file.getInputStream());
         } else {
+            logger.warn("addStudentInfoByExcel::文件类型不正确:" + contentType);
             throw new IllegalArgumentException("文件类型不正确:" + contentType);
         }
         List<StudentInfo> studentInfoList = new ArrayList<>();
+        logger.debug("addStudentInfoByExcel::获取到的工作表个数->" + workbook.getNumberOfSheets());
         for (int index = 0; index < workbook.getNumberOfSheets(); index++) {
+            logger.debug("addStudentInfoByExcel::获取第" + index + "个工作表");
             Sheet sheetAt = workbook.getSheetAt(index);
+            logger.debug("addStudentInfoByExcel::获取到最后的行数->" + sheetAt.getLastRowNum());
             for (int i = 1; i <= sheetAt.getLastRowNum(); i++) {
+                logger.debug("addStudentInfoByExcel::开始获取第->" + i + "列");
                 Row row = sheetAt.getRow(i);
                 String id = getCellValue(row.getCell(0));
                 String name = getCellValue(row.getCell(1));
@@ -278,19 +315,23 @@ public class StudentInfoServiceImpl implements StudentInfoService {
                 String remarks = getCellValue(row.getCell(14));
                 //检查非空字段
                 if (StringUtils.isAnyEmpty(id, name, sex, birthday, tel, htel, intime, isin, teacher, clazz, address, college, profession)) {
+                    logger.info("addStudentInfoByExcel::非空字段有空值,已跳过本次循环");
                     continue;
                 }
                 List<Clazz> clazzList = clazzDao.findByClazz(clazz);
                 if (clazzList.size() == 0) {
+                    logger.info("addStudentInfoByExcel::根据" + clazz + "没有获取到班级,跳过本次循环");
                     continue;
                 }
                 StudentInfo studentInfo = new StudentInfo();
                 try {
+                    logger.debug("addStudentInfoByExcel::要格式化的日期->" + birthday + "||" + intime);
                     Date birthdayDate = new SimpleDateFormat("yyyy-MM-dd").parse(birthday);
                     Date inttimeDate = new SimpleDateFormat("yyyy-MM").parse(intime);
                     studentInfo.setBirthday(birthdayDate);
                     studentInfo.setIntime(inttimeDate);
                 } catch (ParseException e) {
+                    logger.info("addStudentInfoByExcel::日期格式化出错->" + e.getMessage());
                     continue;
                 }
                 if (position != null) {
@@ -309,12 +350,14 @@ public class StudentInfoServiceImpl implements StudentInfoService {
                 studentInfo.setProfession(profession);
                 studentInfo.setId(id);
                 studentInfo.setName(name);
-                System.out.println(studentInfo);
                 studentInfoList.add(studentInfo);
             }
         }
         if (studentInfoList.size() != 0) {
+            logger.info("addStudentInfoByExcel::将要添加" + studentInfoList.size() + "条数据");
             studentInfoList.forEach(studentInfoDao::saveAndFlush);
+        } else {
+            logger.info("addStudentInfoByExcel::集合中数据为0,未添加任何数据");
         }
     }
 
@@ -323,6 +366,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         try {
             stringCellValue = cell.getStringCellValue();
         } catch (NullPointerException e) {
+            logger.debug("getCellValue::cell->" + cell.getColumnIndex() + "->" + e.getMessage());
             e.getMessage();
         }
         return stringCellValue;

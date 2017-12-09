@@ -1,5 +1,7 @@
 package top.itning.ta.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.itning.ta.dao.ClazzDao;
@@ -21,6 +23,7 @@ import java.util.List;
 @Service
 @Transactional(rollbackOn = Exception.class)
 public class ClassManageServiceImpl implements ClassManageService {
+    private static final Logger logger = LoggerFactory.getLogger(ClassManageServiceImpl.class);
 
     private final ClazzDao clazzDao;
 
@@ -37,11 +40,14 @@ public class ClassManageServiceImpl implements ClassManageService {
 
     @Override
     public List<Clazz> getAllClassInfo() {
-        return clazzDao.findAll();
+        List<Clazz> clazzList = clazzDao.findAll();
+        logger.debug("getAllClassInfo::获取到的班级数量" + clazzList.size());
+        return clazzList;
     }
 
     @Override
     public int getStudentNumByClassID(String id) {
+        logger.debug("getStudentNumByClassID::开始统计班级人数");
         return studentInfoDao.countAllByClazz(clazzDao.findOne(id));
     }
 
@@ -65,10 +71,14 @@ public class ClassManageServiceImpl implements ClassManageService {
     @Override
     public void delClassInfo(String id) throws DataNotFindException {
         if (!clazzDao.exists(id)) {
+            logger.warn("delClassInfo::班级ID" + id + "没有找到");
             throw new DataNotFindException("班级ID" + id + "没有找到");
         }
+        logger.debug("delClassInfo::开始删除请假信息");
         studentInfoDao.findAllByClazz(clazzDao.findOne(id)).forEach(studentLeaveDao::deleteAllBySid);
+        logger.debug("delClassInfo::开始删除学生信息");
         studentInfoDao.deleteAllByClazz(clazzDao.findOne(id));
+        logger.debug("delClassInfo::开始班级信息");
         clazzDao.delete(id);
     }
 }

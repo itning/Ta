@@ -1,5 +1,7 @@
 package top.itning.ta.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.itning.ta.dao.LeaveTypeDao;
@@ -17,6 +19,8 @@ import java.util.List;
 @Service
 @Transactional(rollbackOn = Exception.class)
 public class LeaveTypeServiceImpl implements LeaveTypeService {
+    private static final Logger logger = LoggerFactory.getLogger(LeaveTypeServiceImpl.class);
+
     private final LeaveTypeDao leaveTypeDao;
 
     @Autowired
@@ -26,6 +30,8 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
 
     @Override
     public List<LeaveType> getAllLeaveType() {
-        return leaveTypeDao.findAll();
+        List<LeaveType> leaveTypeList = leaveTypeDao.findAll();
+        logger.debug("getAllLeaveType::获取到请假类型数->" + leaveTypeList.size());
+        return leaveTypeList;
     }
 }
