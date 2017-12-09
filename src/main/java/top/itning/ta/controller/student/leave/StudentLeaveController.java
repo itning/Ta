@@ -1,5 +1,7 @@
 package top.itning.ta.controller.student.leave;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +32,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/studentLeave")
 public class StudentLeaveController {
+    private static final Logger logger = LoggerFactory.getLogger(StudentLeaveController.class);
+
     private final StudentLeaveService studentLeaveService;
 
     private final ClassManageService classManageService;
@@ -64,6 +68,7 @@ public class StudentLeaveController {
     public String getAllStudentLeaveInfo(Model model) {
         model.addAttribute("studentLeaveList", studentLeaveService.getAllStudentLeave());
         model.addAttribute("classList", classManageService.getAllClassInfo());
+        logger.debug("getAllStudentLeaveInfo::studentLeaveList/classList添加完成");
         return "historyleave";
     }
 
@@ -77,12 +82,14 @@ public class StudentLeaveController {
     @RequestMapping(value = "/del/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ServerMessage delStudentLeaveInfo(@PathVariable("id") String id) {
+        logger.debug("delStudentLeaveInfo::要删除的ID->" + id);
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setCode(ServerMessage.SUCCESS_CODE);
         serverMessage.setMsg("ID:" + id + "删除成功");
         try {
             studentLeaveService.delStudentLeaveByID(id);
         } catch (DataNotFindException e) {
+            logger.warn("delStudentLeaveInfo::ID->" + id + "没找到,删除失败");
             serverMessage.setCode(ServerMessage.SERVICE_ERROR);
             serverMessage.setMsg(e.getExceptionMessage());
         }
@@ -101,6 +108,7 @@ public class StudentLeaveController {
     public String addStudentLeaveInfoRoute(Model model) {
         model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
         model.addAttribute("classList", classManageService.getAllClassInfo());
+        logger.debug("addStudentLeaveInfoRoute::leaveTypeList/classList添加完成");
         return "addleave";
     }
 
@@ -117,6 +125,7 @@ public class StudentLeaveController {
     @RequestMapping(value = "/addLeave", method = RequestMethod.POST)
     public String addStudentLeaveInfo(StudentLeave studentLeave, String sid) throws NullParameterException, DataNotFindException {
         if (sid == null) {
+            logger.warn("addStudentLeaveInfo:;未获取到sid");
             throw new NullParameterException("参数sid为空");
         }
         studentLeave.setSid(studentInfoService.getOneStudentInfoByID(sid));
@@ -135,6 +144,7 @@ public class StudentLeaveController {
     public String searchStudentLeave(Model model) {
         model.addAttribute("classList", classManageService.getAllClassInfo());
         model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
+        logger.debug("searchStudentLeave::leaveTypeList/classList添加完成");
         return "searchleave";
     }
 
@@ -148,6 +158,7 @@ public class StudentLeaveController {
     @RequestMapping(value = "/searchLeave", method = RequestMethod.GET)
     @ResponseBody
     public List<StudentLeave> searchStudentLeaveInfo(SearchLeave searchLeave) {
+        logger.debug("searchStudentLeaveInfo::开始搜索");
         return studentLeaveService.searchStudentLeaveInfo(searchLeave);
     }
 

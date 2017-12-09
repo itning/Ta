@@ -1,6 +1,6 @@
 server:
   port: 8080
-debug: false
+debug: true
 spring:
   jpa:
     hibernate:
@@ -27,3 +27,5 @@ spring:
     static-locations: /META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${spring.http.multipart.location}
 logging:
   level: debug
+  level.top: debug
+  file: C:/Users/Ning/Desktop/upload/log.log

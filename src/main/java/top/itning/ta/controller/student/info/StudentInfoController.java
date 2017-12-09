@@ -2,6 +2,8 @@ package top.itning.ta.controller.student.info;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +35,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/studentInfo")
 public class StudentInfoController {
+    private static final Logger logger = LoggerFactory.getLogger(StudentInfoController.class);
+
     private final StudentInfoService studentInfoService;
 
     private final ClassManageService classManageService;
@@ -55,15 +59,12 @@ public class StudentInfoController {
      *
      * @param classID 班级ID
      * @return 学生信息集合
-     * @throws NullParameterException 如果参数为空则抛出该异常
-     * @throws DataNotFindException   如果班级没有找到则抛出该异常
+     * @throws DataNotFindException 如果班级没有找到则抛出该异常
      */
     @RequestMapping(value = "/show/class/{classID}", method = RequestMethod.GET)
     @ResponseBody
-    public List<StudentInfo> showStudentInfo(@PathVariable("classID") String classID) throws NullParameterException, DataNotFindException {
-        if (classID == null) {
-            throw new NullParameterException("参数:classID为空");
-        }
+    public List<StudentInfo> showStudentInfo(@PathVariable("classID") String classID) throws DataNotFindException {
+        logger.debug("showStudentInfo::获取到的班级ID->" + classID);
         return studentInfoService.getAllStudentInfoByClass(classID);
     }
 
@@ -77,8 +78,10 @@ public class StudentInfoController {
      */
     @RequestMapping(value = "/show/student/{id}", method = RequestMethod.GET)
     public String showOneStudentInfo(Model model, @PathVariable("id") String id) throws DataNotFindException {
+        logger.debug("showOneStudentInfo::获取到的学生ID->" + id);
         model.addAttribute("studentInfo", studentInfoService.getOneStudentInfoByID(id));
         model.addAttribute("classList", classManageService.getAllClassInfo());
+        logger.debug("showOneStudentInfo::studentInfo/classList添加完成");
         return "student";
     }
 
@@ -88,17 +91,15 @@ public class StudentInfoController {
      * @param model 模型
      * @param id    班级ID
      * @return addstudent.html
-     * @throws NullParameterException 如果班级ID为空则抛出该异常
-     * @throws DataNotFindException   该班级没有找到则抛出该异常
+     * @throws DataNotFindException 该班级没有找到则抛出该异常
      */
     @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/add/web/{id}", method = RequestMethod.GET)
-    public String addStudentByWeb(Model model, @PathVariable("id") String id) throws NullParameterException, DataNotFindException {
-        if (id == null) {
-            throw new NullParameterException("参数ID为空");
-        }
+    public String addStudentByWeb(Model model, @PathVariable("id") String id) throws DataNotFindException {
+        logger.debug("addStudentByWeb::获取到要添加学生的班级ID->" + id);
         model.addAttribute("classInfo", studentInfoService.getClassInfoByID(id));
         model.addAttribute("classList", classManageService.getAllClassInfo());
+        logger.debug("addStudentByWeb::classInfo/classList添加完成");
         return "addstudent";
     }
 
@@ -114,6 +115,7 @@ public class StudentInfoController {
     @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addStudentInfo(StudentInfo studentInfo, @RequestParam("file") MultipartFile file) throws DataNotFindException, NullParameterException {
+        logger.debug("addStudentInfo::file为空->" + file.isEmpty());
         studentInfoService.addStudentInfo(studentInfo, file);
         return "redirect:/#/" + studentInfo.getClazz().getId();
     }
@@ -128,12 +130,14 @@ public class StudentInfoController {
     @RequestMapping(value = "/del/student/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ServerMessage delStudentInfo(@PathVariable("id") String id) {
+        logger.debug("delStudentInfo::删除学生的ID->" + id);
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setMsg("学生ID:" + id + "删除成功");
         serverMessage.setCode(ServerMessage.SUCCESS_CODE);
         try {
             studentInfoService.delStudentInfo(id);
         } catch (DataNotFindException e) {
+            logger.warn("delStudentInfo::删除ID为" + id + "失败,消息->" + e.getExceptionMessage());
             serverMessage.setCode(ServerMessage.NOT_FIND);
             serverMessage.setMsg(e.getExceptionMessage());
         }
@@ -152,6 +156,7 @@ public class StudentInfoController {
     @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/modify/student", method = RequestMethod.POST)
     public String modifyStudentInfo(StudentInfo studentInfo, @RequestParam("file") MultipartFile file) throws NullParameterException {
+        logger.debug("modifyStudentInfo::修改学生ID->" + studentInfo.getId() + "file为空->" + file.isEmpty());
         studentInfoService.addStudentInfo(studentInfo, file);
         return "redirect:/studentInfo/show/student/" + studentInfo.getId();
     }
@@ -167,9 +172,11 @@ public class StudentInfoController {
     @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/down", method = RequestMethod.GET)
     public void downStudentInfoListByClass(String id, HttpServletResponse response) throws IOException, DataNotFindException {
+        logger.debug("downStudentInfoListByClass::要下载的学生ID->" + id);
         String[] idArray = StringUtils.split(id, "-");
         for (String i : idArray) {
             if (!NumberUtils.isParsable(i)) {
+                logger.warn("downStudentInfoListByClass::错误参数->" + i);
                 throw new IllegalArgumentException("参数不正确->" + i);
             }
         }
@@ -177,9 +184,11 @@ public class StudentInfoController {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment;filename=" + new String(("学生信息" + nowTime + ".xlsx").getBytes(), "ISO-8859-1"));
         ServletOutputStream outputStream = response.getOutputStream();
+        logger.debug("downStudentInfoListByClass::outputStream.isReady->" + outputStream.isReady());
         studentInfoService.downStudentInfo(outputStream, idArray);
         outputStream.flush();
         outputStream.close();
+        logger.debug("downStudentInfoListByClass::outputStream close");
     }
 
     /**
@@ -195,6 +204,7 @@ public class StudentInfoController {
     @RequestMapping(value = "/upExcelFile", method = RequestMethod.POST)
     public String upExcelFile(@RequestParam("file") MultipartFile file) throws NullParameterException, DataNotFindException, IOException {
         if (file.isEmpty()) {
+            logger.warn("upExcelFile::file为空");
             throw new NullParameterException("file为空");
         }
         studentInfoService.addStudentInfoByExcel(file);

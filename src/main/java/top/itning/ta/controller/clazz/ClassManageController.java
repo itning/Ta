@@ -1,5 +1,7 @@
 package top.itning.ta.controller.clazz;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,8 @@ import java.util.UUID;
 @PreAuthorize("hasAuthority('A')")
 @RequestMapping("/class")
 public class ClassManageController {
+    private static final Logger logger = LoggerFactory.getLogger(ClassManageController.class);
+
     private final ClassManageService classManageService;
 
     @Autowired
@@ -42,9 +46,11 @@ public class ClassManageController {
     @RequestMapping(value = "/show", method = RequestMethod.GET)
     public String showClassInfo(Model model) {
         List<Clazz> allClassInfo = classManageService.getAllClassInfo();
+        logger.debug("showClassInfo::班级集合信息获取完成");
         if (allClassInfo != null) {
             allClassInfo.forEach(clazz -> clazz.setNum(classManageService.getStudentNumByClassID(clazz.getId())));
             model.addAttribute("classList", allClassInfo);
+            logger.debug("showClassInfo::添加classList完成,集合大小->" + allClassInfo.size());
         }
         return "classset";
     }
@@ -65,6 +71,7 @@ public class ClassManageController {
         try {
             classManageService.addClassInfo(clazz);
         } catch (NullParameterException e) {
+            logger.warn("addClassInfo::添加失败->" + e.getExceptionMessage());
             serverMessage.setCode(ServerMessage.SERVICE_ERROR);
             serverMessage.setMsg(e.getExceptionMessage());
         }
@@ -81,12 +88,14 @@ public class ClassManageController {
     @RequestMapping(value = "/del/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ServerMessage delClassInfo(@PathVariable("id") String id) {
+        logger.debug("delClassInfo::要删除的班级ID->" + id);
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setCode(ServerMessage.SUCCESS_CODE);
         serverMessage.setMsg("删除成功");
         try {
             classManageService.delClassInfo(id);
         } catch (DataNotFindException e) {
+            logger.warn("addClassInfo::删除失败->" + e.getExceptionMessage());
             serverMessage.setCode(ServerMessage.SERVICE_ERROR);
             serverMessage.setMsg(e.getExceptionMessage());
         }
