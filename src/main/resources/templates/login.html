@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
     <title>登陆-教师助手-Teacher Assistant</title>
 
     <!--mdui css-->
-    <link href="lib_web/mdui/css/mdui.min.css" rel="stylesheet">
+    <link th:href="@{/lib_web/mdui/css/mdui.min.css}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,7 +36,7 @@
         <div class="mdui-card-primary-subtitle">使用您的账户进行登陆</div>
     </div>
     <div class="mdui-card-content">
-        <form id="login_form" action="" method="post">
+        <form id="login_form" th:action="@{/login}" method="post">
             <div class="mdui-textfield mdui-textfield-floating-label">
                 <label class="mdui-textfield-label">用户名</label>
                 <input name="username" class="mdui-textfield-input" type="text" maxlength="10"/>
@@ -48,15 +48,15 @@
                 <div class="mdui-textfield-error">密码不能为空</div>
             </div>
             <div class="mdui-card-actions" style="top: 20px;">
-                <input onclick="submit_btn()" type="button"
-                       class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme mdui-btn-block" value="登陆">
+                <input  type="submit"
+                       class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme mdui-btn-block" value="登陆"><!--onclick="submit_btn()"-->
             </div>
         </form>
     </div>
 </div>
-<script src="lib_web/jquery/jquery-3.2.1.min.js"></script>
-<script src="lib_web/mdui/js/mdui.min.js"></script>
-<script src="lib_web/canvas-nest/canvas-nest.min.js"></script>
+<script th:src="@{/lib_web/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/lib_web/mdui/js/mdui.min.js}"></script>
+<script th:src="@{/lib_web/canvas-nest/canvas-nest.min.js}"></script>
 <script>
     'use strict';
     $(function () {
@@ -82,7 +82,6 @@
         });
         if (!isnull) {
             $('#login_form').submit();
-            window.location.reload();//刷新当前页面.
         }
     }
 </script>

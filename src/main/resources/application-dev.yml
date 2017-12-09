@@ -25,9 +25,5 @@ spring:
       location: C:/Users/Ning/Desktop/upload/ #文件上传路径
   resources:
     static-locations: /META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${spring.http.multipart.location}
-security:
-  user:
-    name: 1
-    password: 1
 logging:
   level: debug

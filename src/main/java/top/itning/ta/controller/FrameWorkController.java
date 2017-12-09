@@ -3,8 +3,7 @@ package top.itning.ta.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import top.itning.ta.entity.Clazz;
 import top.itning.ta.service.FrameWorkService;
 
@@ -25,12 +24,22 @@ public class FrameWorkController {
     }
 
     /**
+     * 根路径
+     *
+     * @return 重定向到主页
+     */
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/index";
+    }
+
+    /**
      * 页面框架初始化
      *
      * @param model 模型
      * @return index.html
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping("/index")
     public String frameWorkInit(Model model) {
         List<Clazz> allClazzInfo = frameWorkService.getAllClazzInfo();
         if (allClazzInfo.size() == 0) {

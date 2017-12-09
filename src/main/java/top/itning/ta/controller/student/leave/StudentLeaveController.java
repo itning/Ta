@@ -2,6 +2,7 @@ package top.itning.ta.controller.student.leave;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -58,6 +59,7 @@ public class StudentLeaveController {
      * @param model 模型
      * @return historyleave.html
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/show", method = RequestMethod.GET)
     public String getAllStudentLeaveInfo(Model model) {
         model.addAttribute("studentLeaveList", studentLeaveService.getAllStudentLeave());
@@ -71,6 +73,7 @@ public class StudentLeaveController {
      * @param id 请假ID
      * @return 服务器消息Json
      */
+    @PreAuthorize("hasAuthority('A')")
     @RequestMapping(value = "/del/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ServerMessage delStudentLeaveInfo(@PathVariable("id") String id) {
@@ -93,6 +96,7 @@ public class StudentLeaveController {
      * @param model 模型
      * @return addleave.html
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addStudentLeaveInfoRoute(Model model) {
         model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
@@ -109,6 +113,7 @@ public class StudentLeaveController {
      * @throws NullParameterException 如果studentLeave有参数为空则抛出该异常
      * @throws DataNotFindException   如果学生ID没有找到则抛出该异常
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/addLeave", method = RequestMethod.POST)
     public String addStudentLeaveInfo(StudentLeave studentLeave, String sid) throws NullParameterException, DataNotFindException {
         if (sid == null) {
@@ -125,6 +130,7 @@ public class StudentLeaveController {
      * @param model 模型
      * @return searchleave.html
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchStudentLeave(Model model) {
         model.addAttribute("classList", classManageService.getAllClassInfo());
@@ -138,6 +144,7 @@ public class StudentLeaveController {
      * @param searchLeave 搜索请假信息
      * @return 搜索的学生请假信息集合
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/searchLeave", method = RequestMethod.GET)
     @ResponseBody
     public List<StudentLeave> searchStudentLeaveInfo(SearchLeave searchLeave) {

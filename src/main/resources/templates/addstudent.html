@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,7 +63,7 @@
         <img th:src="@{/image/card.jpg}"/>
         <div class="mdui-card-media-covered">
             <div class="mdui-card-primary">
-                <div class="mdui-card-primary-title">舒露</div>
+                <div class="mdui-card-primary-title" sec:authentication="name">舒露</div>
                 <div class="mdui-card-primary-subtitle">欢迎</div>
             </div>
         </div>
@@ -75,18 +75,15 @@
                 <div class="mdui-list-item-content">学生信息管理</div>
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
-            <!--/*@thymesVar id="classList" type="java.util.List"*/-->
+            <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
             <div th:each="clazz : ${classList} " class="mdui-collapse-item-body mdui-list mdui-list-dense">
-                <!--/*@thymesVar id="clazz" type="top.itning.ta.entity.Clazz"*/-->
-                <!--/*@thymesVar id="id" type="java.lang.String"*/-->
-                <!--/*@thymesVar id="classInfo" type="top.itning.ta.entity.Clazz"*/-->
                 <a th:id="${clazz.id}" th:href="${'/#/'+clazz.id}" th:text="${clazz.clazz}"
                    class="mdui-list-item mdui-ripple"
                    th:classappend="${classInfo.id==clazz.id?'mdui-list-item-active':''}">1602班</a>
             </div>
         </li>
-
-        <li class="mdui-collapse-item">
+        <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item" sec:authorize="hasAnyAuthority('A','B')">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
                 <div class="mdui-list-item-content">学生请假管理</div>
@@ -98,7 +95,7 @@
                 <a th:href="@{/studentLeave/add}" class="mdui-list-item mdui-ripple">添加请假信息</a>
             </div>
         </li>
-        <li class="mdui-list-item mdui-ripple">
+        <li class="mdui-list-item mdui-ripple" sec:authorize="hasAuthority('A')">
             <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
             <a th:href="@{/class/show}" class="mdui-list-item-content">班级管理</a>
         </li>
@@ -115,7 +112,7 @@
         </li>
         <li class="mdui-list-item mdui-ripple">
             <i class="mdui-list-item-icon mdui-icon material-icons">vpn_key</i>
-            <a href="#" class="mdui-list-item-content">注销登陆</a>
+            <a th:href="@{/logout}" class="mdui-list-item-content">注销登陆</a>
         </li>
     </ul>
 </nav>

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -90,6 +91,7 @@ public class StudentInfoController {
      * @throws NullParameterException 如果班级ID为空则抛出该异常
      * @throws DataNotFindException   该班级没有找到则抛出该异常
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/add/web/{id}", method = RequestMethod.GET)
     public String addStudentByWeb(Model model, @PathVariable("id") String id) throws NullParameterException, DataNotFindException {
         if (id == null) {
@@ -109,6 +111,7 @@ public class StudentInfoController {
      * @throws DataNotFindException   如果数据没有找到抛出该异常
      * @throws NullParameterException 如果有参数为空抛出该异常
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addStudentInfo(StudentInfo studentInfo, @RequestParam("file") MultipartFile file) throws DataNotFindException, NullParameterException {
         studentInfoService.addStudentInfo(studentInfo, file);
@@ -121,6 +124,7 @@ public class StudentInfoController {
      * @param id 学生ID
      * @return json 消息
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/del/student/{id}", method = RequestMethod.GET)
     @ResponseBody
     public ServerMessage delStudentInfo(@PathVariable("id") String id) {
@@ -145,6 +149,7 @@ public class StudentInfoController {
      * @return 重定向到该生详情页
      * @throws NullParameterException StudentInfo实体类有空参数时抛出该异常
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/modify/student", method = RequestMethod.POST)
     public String modifyStudentInfo(StudentInfo studentInfo, @RequestParam("file") MultipartFile file) throws NullParameterException {
         studentInfoService.addStudentInfo(studentInfo, file);
@@ -159,6 +164,7 @@ public class StudentInfoController {
      * @throws IOException          文件操作失败抛出该异常
      * @throws DataNotFindException 该学生ID没有找到则抛出该异常
      */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/down", method = RequestMethod.GET)
     public void downStudentInfoListByClass(String id, HttpServletResponse response) throws IOException, DataNotFindException {
         String[] idArray = StringUtils.split(id, "-");
@@ -176,6 +182,16 @@ public class StudentInfoController {
         outputStream.close();
     }
 
+    /**
+     * 上传学生信息通过Excel文件
+     *
+     * @param file 文件
+     * @return 重定向到主页
+     * @throws NullParameterException 文件不存在则抛出该异常
+     * @throws DataNotFindException   班级没有找到则抛出该异常
+     * @throws IOException            文件操作异常抛出
+     */
+    @PreAuthorize("hasAnyAuthority('A','B')")
     @RequestMapping(value = "/upExcelFile", method = RequestMethod.POST)
     public String upExcelFile(@RequestParam("file") MultipartFile file) throws NullParameterException, DataNotFindException, IOException {
         if (file.isEmpty()) {
