@@ -58,6 +58,13 @@ public class StudentLeave implements Serializable {
     @Column(name = "remarks")
     private String remarks;
 
+    /**
+     * 所属用户名
+     */
+    @NotNull
+    @Column(name = "uname")
+    private String uname;
+
     public String getId() {
         return id;
     }
@@ -114,6 +121,14 @@ public class StudentLeave implements Serializable {
         this.remarks = remarks;
     }
 
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
     @Override
     public String toString() {
         return "StudentLeave{" +
@@ -124,6 +139,7 @@ public class StudentLeave implements Serializable {
                 ", matter=" + matter +
                 ", reason='" + reason + '\'' +
                 ", remarks='" + remarks + '\'' +
+                ", uname='" + uname + '\'' +
                 '}';
     }
 }

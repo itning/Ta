@@ -18,7 +18,6 @@ import top.itning.ta.service.ClassManageService;
 import top.itning.ta.service.StudentLeaveService;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 班级管理控制器
@@ -69,7 +68,6 @@ public class ClassManageController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     @ResponseBody
     public ServerMessage addClassInfo(Clazz clazz) {
-        clazz.setId(UUID.randomUUID().toString().replace("-", ""));
         ServerMessage serverMessage = new ServerMessage();
         serverMessage.setCode(ServerMessage.SUCCESS_CODE);
         serverMessage.setMsg("添加成功");

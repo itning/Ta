@@ -5,6 +5,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import top.itning.ta.dao.ClazzDao;
 import top.itning.ta.dao.LeaveTypeDao;
@@ -13,6 +14,7 @@ import top.itning.ta.dao.StudentLeaveDao;
 import top.itning.ta.entity.SearchLeave;
 import top.itning.ta.entity.StudentInfo;
 import top.itning.ta.entity.StudentLeave;
+import top.itning.ta.entity.User;
 import top.itning.ta.exception.DataNotFindException;
 import top.itning.ta.exception.NullParameterException;
 import top.itning.ta.service.StudentLeaveService;
@@ -52,7 +54,7 @@ public class StudentLeaveServiceImpl implements StudentLeaveService {
     @Override
     public List<StudentLeave> getAllStudentLeave() {
         logger.debug("getAllStudentLeave::开始获取学生请假信息");
-        List<StudentLeave> studentLeaveList = studentLeaveDao.findAll();
+        List<StudentLeave> studentLeaveList = studentLeaveDao.findByUname(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName());
         logger.debug("getAllStudentLeave::获取学生请假信息的数量" + studentLeaveList.size());
         return studentLeaveList;
     }
@@ -69,6 +71,7 @@ public class StudentLeaveServiceImpl implements StudentLeaveService {
 
     @Override
     public void addStudentLeaveInfo(StudentLeave studentLeave) throws NullParameterException {
+        studentLeave.setUname(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName());
         if (studentLeave.getId() == null) {
             studentLeave.setId(UUID.randomUUID().toString().replace("-", ""));
         }
@@ -95,6 +98,7 @@ public class StudentLeaveServiceImpl implements StudentLeaveService {
         logger.debug("searchStudentLeaveInfo::开始搜素");
         return studentLeaveDao.findAll((root, query, cb) -> {
             List<Predicate> list = new ArrayList<>();
+            list.add(cb.equal(root.get("uname"), ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName()));
             if (StringUtils.isNoneBlank(searchLeave.getKey())) {
                 logger.debug("searchStudentLeaveInfo::已获取到key->" + searchLeave.getKey());
                 if (NumberUtils.isParsable(searchLeave.getKey())) {
@@ -189,6 +193,6 @@ public class StudentLeaveServiceImpl implements StudentLeaveService {
 
     @Override
     public long getStudentLeaveNum() {
-        return studentLeaveDao.count();
+        return studentLeaveDao.countByUname(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getName());
     }
 }

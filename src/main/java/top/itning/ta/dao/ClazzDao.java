@@ -18,4 +18,12 @@ public interface ClazzDao extends JpaRepository<Clazz, String> {
      * @return 班级集合
      */
     List<Clazz> findByClazz(String clzz);
+
+    /**
+     * 根据教师名查找班级
+     *
+     * @param teacher 教师名
+     * @return 班级集合
+     */
+    List<Clazz> findByTeacher(String teacher);
 }
