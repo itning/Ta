@@ -6,15 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import top.itning.ta.entity.Clazz;
 import top.itning.ta.entity.ServerMessage;
 import top.itning.ta.exception.DataNotFindException;
 import top.itning.ta.exception.NullParameterException;
 import top.itning.ta.service.ClassManageService;
+import top.itning.ta.service.SettingService;
 import top.itning.ta.service.StudentLeaveService;
 
 import java.util.List;
@@ -34,10 +32,13 @@ public class ClassManageController {
 
     private final StudentLeaveService studentLeaveService;
 
+    private final SettingService settingService;
+
     @Autowired
-    public ClassManageController(ClassManageService classManageService, StudentLeaveService studentLeaveService) {
+    public ClassManageController(ClassManageService classManageService, StudentLeaveService studentLeaveService, SettingService settingService) {
         this.classManageService = classManageService;
         this.studentLeaveService = studentLeaveService;
+        this.settingService = settingService;
     }
 
     /**
@@ -46,7 +47,7 @@ public class ClassManageController {
      * @param model 模型
      * @return classset.html
      */
-    @RequestMapping(value = "/show", method = RequestMethod.GET)
+    @GetMapping("/show")
     public String showClassInfo(Model model) {
         List<Clazz> allClassInfo = classManageService.getAllClassInfo();
         logger.debug("showClassInfo::班级集合信息获取完成");
@@ -56,6 +57,8 @@ public class ClassManageController {
             logger.debug("showClassInfo::添加classList完成,集合大小->" + allClassInfo.size());
         }
         model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
+        model.addAttribute("themeColor", settingService.getThemeColor());
+        model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
         return "classset";
     }
 
@@ -65,7 +68,7 @@ public class ClassManageController {
      * @param clazz 班级信息
      * @return 服务器消息Json
      */
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    @GetMapping("/add")
     @ResponseBody
     public ServerMessage addClassInfo(Clazz clazz) {
         ServerMessage serverMessage = new ServerMessage();
@@ -88,7 +91,7 @@ public class ClassManageController {
      * @param id 班级ID
      * @return 服务器消息json
      */
-    @RequestMapping(value = "/del/{id}", method = RequestMethod.GET)
+    @GetMapping("/del/{id}")
     @ResponseBody
     public ServerMessage delClassInfo(@PathVariable("id") String id) {
         logger.debug("delClassInfo::要删除的班级ID->" + id);

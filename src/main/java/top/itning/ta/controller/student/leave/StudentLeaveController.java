@@ -14,10 +14,7 @@ import top.itning.ta.entity.ServerMessage;
 import top.itning.ta.entity.StudentLeave;
 import top.itning.ta.exception.DataNotFindException;
 import top.itning.ta.exception.NullParameterException;
-import top.itning.ta.service.ClassManageService;
-import top.itning.ta.service.LeaveTypeService;
-import top.itning.ta.service.StudentInfoService;
-import top.itning.ta.service.StudentLeaveService;
+import top.itning.ta.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -42,12 +39,15 @@ public class StudentLeaveController {
 
     private final StudentInfoService studentInfoService;
 
+    private final SettingService settingService;
+
     @Autowired
-    public StudentLeaveController(StudentLeaveService studentLeaveService, ClassManageService classManageService, LeaveTypeService leaveTypeService, StudentInfoService studentInfoService) {
+    public StudentLeaveController(StudentLeaveService studentLeaveService, ClassManageService classManageService, LeaveTypeService leaveTypeService, StudentInfoService studentInfoService, SettingService settingService) {
         this.studentLeaveService = studentLeaveService;
         this.classManageService = classManageService;
         this.leaveTypeService = leaveTypeService;
         this.studentInfoService = studentInfoService;
+        this.settingService = settingService;
     }
 
     @InitBinder
@@ -64,7 +64,7 @@ public class StudentLeaveController {
      * @return historyleave.html
      */
     @PreAuthorize("hasAnyAuthority('A','B')")
-    @RequestMapping(value = "/show", method = RequestMethod.GET)
+    @GetMapping("/show")
     public String getAllStudentLeaveInfo(Model model) {
         List<StudentLeave> studentLeaveList = studentLeaveService.getAllStudentLeave();
         if (studentLeaveList.size() == 0) {
@@ -73,6 +73,8 @@ public class StudentLeaveController {
         }
         model.addAttribute("studentLeaveList", studentLeaveList);
         model.addAttribute("classList", classManageService.getAllClassInfo());
+        model.addAttribute("themeColor", settingService.getThemeColor());
+        model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
         logger.debug("getAllStudentLeaveInfo::studentLeaveList/classList添加完成");
         return "historyleave";
     }
@@ -84,7 +86,7 @@ public class StudentLeaveController {
      * @return 服务器消息Json
      */
     @PreAuthorize("hasAuthority('A')")
-    @RequestMapping(value = "/del/{id}", method = RequestMethod.GET)
+    @GetMapping("/del/{id}")
     @ResponseBody
     public ServerMessage delStudentLeaveInfo(@PathVariable("id") String id) {
         logger.debug("delStudentLeaveInfo::要删除的ID->" + id);
@@ -103,17 +105,19 @@ public class StudentLeaveController {
     }
 
     /**
-     * 添加学生信息页面
+     * 添加学生请假信息页面
      *
      * @param model 模型
      * @return addleave.html
      */
     @PreAuthorize("hasAnyAuthority('A','B')")
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    @GetMapping("/add")
     public String addStudentLeaveInfoRoute(Model model) {
         model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
         model.addAttribute("classList", classManageService.getAllClassInfo());
         model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
+        model.addAttribute("themeColor", settingService.getThemeColor());
+        model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
         logger.debug("addStudentLeaveInfoRoute::leaveTypeList/classList添加完成");
         return "addleave";
     }
@@ -128,7 +132,7 @@ public class StudentLeaveController {
      * @throws DataNotFindException   如果学生ID没有找到则抛出该异常
      */
     @PreAuthorize("hasAnyAuthority('A','B')")
-    @RequestMapping(value = "/addLeave", method = RequestMethod.POST)
+    @PostMapping("/addLeave")
     public String addStudentLeaveInfo(StudentLeave studentLeave, String sid) throws NullParameterException, DataNotFindException {
         if (sid == null) {
             logger.warn("addStudentLeaveInfo:;未获取到sid");
@@ -146,7 +150,7 @@ public class StudentLeaveController {
      * @return searchleave.html
      */
     @PreAuthorize("hasAnyAuthority('A','B')")
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @GetMapping("/search")
     public String searchStudentLeave(Model model) {
         if (studentLeaveService.getStudentLeaveNum() == 0) {
             logger.info("searchStudentLeave::学生请假信息为空,重定向到添加页面");
@@ -154,6 +158,8 @@ public class StudentLeaveController {
         }
         model.addAttribute("classList", classManageService.getAllClassInfo());
         model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
+        model.addAttribute("themeColor", settingService.getThemeColor());
+        model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
         logger.debug("searchStudentLeave::leaveTypeList/classList添加完成");
         return "searchleave";
     }
@@ -165,7 +171,7 @@ public class StudentLeaveController {
      * @return 搜索的学生请假信息集合
      */
     @PreAuthorize("hasAnyAuthority('A','B')")
-    @RequestMapping(value = "/searchLeave", method = RequestMethod.GET)
+    @GetMapping("/searchLeave")
     @ResponseBody
     public List<StudentLeave> searchStudentLeaveInfo(SearchLeave searchLeave) {
         logger.debug("searchStudentLeaveInfo::开始搜索");

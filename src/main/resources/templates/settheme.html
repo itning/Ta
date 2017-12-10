@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,12 +12,12 @@
     <!--<link href="/favicon.ico" rel="icon" type="image/x-icon"/>
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>-->
 
-    <title>学生管理系统</title>
+    <title>主题设置-TA</title>
 
     <!--mdui css-->
-    <link href="lib_web/mdui/css/mdui.min.css" rel="stylesheet">
+    <link th:href="@{/lib_web/mdui/css/mdui.min.css}" rel="stylesheet">
 
-    <link href="css/common.css" rel="stylesheet">
+    <link th:href="@{/css/common.css}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -24,61 +25,67 @@
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="mdui-drawer-body-left mdui-appbar-with-toolbar">
+<!--/*@thymesVar id="themeColor" type="java.lang.String"*/-->
+<!--/*@thymesVar id="themeColorAccent" type="java.lang.String"*/-->
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar" th:classappend="${themeColor+' '+themeColorAccent}">
 <header class="mdui-appbar mdui-appbar-fixed">
     <div class="mdui-toolbar mdui-color-theme">
         <a href="javascript:" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i
                 class="mdui-icon material-icons">menu</i></a>
         <p>学生管理系统</p>
         <div class="mdui-toolbar-spacer"></div>
-        <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+        <a href="javascript:window.location.reload();" class="mdui-btn mdui-btn-icon"><i
+                class="mdui-icon material-icons">refresh</i></a>
     </div>
 </header>
 
 <nav class="mdui-drawer mdui-card" id="left-drawer">
     <div class="mdui-card-media">
-        <img src="image/card.jpg"/>
+        <img th:src="@{/image/card.jpg}"/>
         <div class="mdui-card-media-covered">
             <div class="mdui-card-primary">
-                <div class="mdui-card-primary-title">舒露</div>
+                <div class="mdui-card-primary-title" sec:authentication="name">舒露</div>
                 <div class="mdui-card-primary-subtitle">欢迎</div>
             </div>
         </div>
     </div>
     <ul class="mdui-list mdui-card-content" mdui-collapse="{accordion: true}">
-        <li class="mdui-collapse-item">
+        <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item mdui-collapse-item-open">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
                 <div class="mdui-list-item-content">学生信息管理</div>
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
-            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
-                <li class="mdui-list-item mdui-ripple"><a href="#">1601班</a></li>
-                <li class="mdui-list-item mdui-ripple"><a href="#">1602班</a></li>
-                <li class="mdui-list-item mdui-ripple"><a href="#">1603班</a></li>
-                <li class="mdui-list-item mdui-ripple"><a href="#">1604班</a></li>
-            </ul>
+            <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
+            <div th:each="clazz : ${classList} " class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <!--/*@thymesVar id="clazz" type="top.itning.ta.entity.Clazz"*/-->
+                <!--/*@thymesVar id="id" type="java.lang.String"*/-->
+                <a th:id="${clazz.id}" th:href="${'/#/'+clazz.id}" th:text="${clazz.clazz}"
+                   class="mdui-list-item mdui-ripple">1602班</a>
+            </div>
         </li>
 
-        <li class="mdui-collapse-item">
+        <li th:if="${classList.size()!=0}" class="mdui-collapse-item" sec:authorize="hasAnyAuthority('A','B')">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
                 <div class="mdui-list-item-content">学生请假管理</div>
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
-            <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
-                <li class="mdui-list-item mdui-ripple">请假情况汇总</li>
-                <li class="mdui-list-item mdui-ripple">学期请假信息</li>
-                <li class="mdui-list-item mdui-ripple">班级请假信息</li>
-            </ul>
+            <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
+                <!--/*@thymesVar id="studentLeaveNum" type="java.lang.Long"*/-->
+                <a th:if="${studentLeaveNum!=0}" th:href="@{/studentLeave/show}" class="mdui-list-item mdui-ripple">历史请假信息</a>
+                <a th:if="${studentLeaveNum!=0}" th:href="@{/studentLeave/search}" class="mdui-list-item mdui-ripple">查询请假信息</a>
+                <a th:href="@{/studentLeave/add}" class="mdui-list-item mdui-ripple">添加请假信息</a>
+            </div>
         </li>
-        <li class="mdui-list-item mdui-ripple">
+        <li class="mdui-list-item mdui-ripple" sec:authorize="hasAuthority('A')">
             <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
-            <a href="#" class="mdui-list-item-content">班级管理</a>
+            <a th:href="@{/class/show}" class="mdui-list-item-content">班级管理</a>
         </li>
         <li class="mdui-list-item mdui-ripple mdui-list-item-active">
             <i class="mdui-list-item-icon mdui-icon material-icons">color_lens</i>
-            <a href="#" class="mdui-list-item-content">更换主题</a>
+            <a th:href="@{/theme}" class="mdui-list-item-content">更换主题</a>
         </li>
         <li class="mdui-list-item mdui-ripple">
             <label class="mdui-switch">
@@ -89,7 +96,7 @@
         </li>
         <li class="mdui-list-item mdui-ripple">
             <i class="mdui-list-item-icon mdui-icon material-icons">vpn_key</i>
-            <a href="#" class="mdui-list-item-content">注销登陆</a>
+            <a th:href="@{/logout}" class="mdui-list-item-content">注销登陆</a>
         </li>
     </ul>
 </nav>
@@ -140,48 +147,73 @@
                     <option style="background-color: #FF6E40" value="deep-orange">深橙色</option>
                 </select></div>
             </div>
-            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme">主色</button>
-            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">强调色</button>
+            <button id="theme_color_id" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme">主色</button>
+            <button id="theme_color_accent_id" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">
+                强调色
+            </button>
+            <button onclick="submitSetting()"
+                    class="mdui-m-t-5 mdui-btn mdui-btn-raised mdui-ripple mdui-btn-block mdui-color-theme-accent">
+                保存修改
+            </button>
         </div>
         <div style="padding-bottom: 500px"></div>
     </div>
 </section>
-<script src="lib_web/jquery/jquery-3.2.1.min.js"></script>
-<script src="lib_web/mdui/js/mdui.min.js"></script>
-<script src="js/common.js"></script>
-<script>
+<script th:src="@{/lib_web/jquery/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/lib_web/mdui/js/mdui.min.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
     'use strict';
+    var themeColor = [[${themeColor}]];
+    var themeColorAccent = [[${themeColorAccent}]];
     $(function () {
-        var last_primary_color = "indigo";
-        var last_accent_color = "pink";
-        var $body = $('body');
-        var primary_color = localStorage.getItem('primary_color');
-        var accent_color = localStorage.getItem('accent_color');
-        if (primary_color !== null) {
-            last_primary_color = primary_color;
-            $('#primary_color').val(primary_color);
-        }
-        if (accent_color !== null) {
-            last_accent_color = accent_color;
-            $('#accent_color').val(accent_color);
-        }
-        $body.addClass('mdui-theme-primary-' + last_primary_color);
-        $body.addClass('mdui-theme-accent-' + last_accent_color);
-        $('#primary_color').change(function () {
+        var $primaryColor = $('#primary_color');
+        var $accentColor = $('#accent_color');
+        $primaryColor.val(themeColor.substring(themeColor.lastIndexOf("-") + 1));
+        $accentColor.val(themeColorAccent.substring(themeColorAccent.lastIndexOf("-") + 1));
+        var last_primary_color = "";
+        $primaryColor.change(function () {
             var val = $(this).val();
-            $body.removeClass('mdui-theme-primary-' + last_primary_color);
-            $body.addClass('mdui-theme-primary-' + val);
+            var $themeColorId = $('#theme_color_id');
+            if (last_primary_color === "") {
+                $themeColorId.removeClass('mdui-color-theme');
+            } else {
+                $themeColorId.removeClass('mdui-color-' + last_primary_color);
+            }
             last_primary_color = val;
-            localStorage.setItem('primary_color', val);
+            $themeColorId.addClass('mdui-color-' + val);
+
         });
-        $('#accent_color').change(function () {
+        var last_accent_color = "";
+        $accentColor.change(function () {
             var val = $(this).val();
-            $body.removeClass('mdui-theme-accent-' + last_accent_color);
-            $body.addClass('mdui-theme-accent-' + val);
+            var $themeColorAccentId = $('#theme_color_accent_id');
+            if (last_accent_color === "") {
+                $themeColorAccentId.removeClass('mdui-color-theme-accent');
+            } else {
+                $themeColorAccentId.removeClass('mdui-color-' + last_accent_color);
+            }
             last_accent_color = val;
-            localStorage.setItem('accent_color', val);
+            $themeColorAccentId.addClass('mdui-color-' + val);
         });
     });
+
+    /*设置颜色*/
+    function submitSetting() {
+        var primaryColor = $('#primary_color').val();
+        var accentColor = $('#accent_color').val();
+        if (primaryColor !== (themeColor.substring(themeColor.lastIndexOf("-") + 1)) || accentColor !== (themeColorAccent.substring(themeColorAccent.lastIndexOf("-") + 1))) {
+            $.get("/theme/set?primaryColor=" + primaryColor + "&accentColor=" + accentColor, function (data) {
+                if (data.code === 200) {
+                    window.location.reload();
+                } else {
+                    mdui.snackbar({
+                        message: data.msg
+                    });
+                }
+            });
+        }
+    }
 </script>
 </body>
 </html>

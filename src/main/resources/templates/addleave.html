@@ -12,7 +12,7 @@
     <!--<link href="/favicon.ico" rel="icon" type="image/x-icon"/>
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>-->
 
-    <title>添加请假信息-教师助手-Teacher Assistant</title>
+    <title>添加请假信息-TA</title>
 
     <!--mdui css-->
     <link th:href="@{/lib_web/mdui/css/mdui.min.css}" rel="stylesheet">
@@ -30,7 +30,9 @@
         }
     </style>
 </head>
-<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-indigo mdui-theme-accent-pink">
+<!--/*@thymesVar id="themeColor" type="java.lang.String"*/-->
+<!--/*@thymesVar id="themeColorAccent" type="java.lang.String"*/-->
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar" th:classappend="${themeColor+' '+themeColorAccent}">
 <header class="mdui-appbar mdui-appbar-fixed">
     <div class="mdui-toolbar mdui-color-theme">
         <a href="javascript:" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i
@@ -89,7 +91,7 @@
         </li>
         <li class="mdui-list-item mdui-ripple">
             <i class="mdui-list-item-icon mdui-icon material-icons">color_lens</i>
-            <a href="#" class="mdui-list-item-content">更换主题</a>
+            <a th:href="@{/theme}" class="mdui-list-item-content">更换主题</a>
         </li>
         <li class="mdui-list-item mdui-ripple">
             <label class="mdui-switch">

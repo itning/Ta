@@ -54,6 +54,18 @@ public class User implements Serializable, UserDetails {
     @Column(name = "name")
     private String name;
 
+    /**
+     * 主色
+     */
+    @Column(name = "tc")
+    private String themeColor;
+
+    /**
+     * 强调色
+     */
+    @Column(name = "tca")
+    private String themeColorAccent;
+
     public String getId() {
         return id;
     }
@@ -123,6 +135,22 @@ public class User implements Serializable, UserDetails {
         this.name = name;
     }
 
+    public String getThemeColor() {
+        return themeColor;
+    }
+
+    public void setThemeColor(String themeColor) {
+        this.themeColor = themeColor;
+    }
+
+    public String getThemeColorAccent() {
+        return themeColorAccent;
+    }
+
+    public void setThemeColorAccent(String themeColorAccent) {
+        this.themeColorAccent = themeColorAccent;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -131,6 +159,8 @@ public class User implements Serializable, UserDetails {
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 ", name='" + name + '\'' +
+                ", themeColor='" + themeColor + '\'' +
+                ", themeColorAccent='" + themeColorAccent + '\'' +
                 '}';
     }
 }
