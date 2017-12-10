@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: top.itning.ta.TaApplication
+Application-Name: Ta
+Application-Version: 1.0.0
