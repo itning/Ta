@@ -113,6 +113,7 @@ public class StudentLeaveController {
     public String addStudentLeaveInfoRoute(Model model) {
         model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
         model.addAttribute("classList", classManageService.getAllClassInfo());
+        model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
         logger.debug("addStudentLeaveInfoRoute::leaveTypeList/classList添加完成");
         return "addleave";
     }

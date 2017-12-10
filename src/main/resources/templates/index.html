@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -71,8 +72,9 @@
                 <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
             </div>
             <div class="mdui-collapse-item-body mdui-list mdui-list-dense">
-                <a th:href="@{/studentLeave/show}" class="mdui-list-item mdui-ripple">历史请假信息</a>
-                <a th:href="@{/studentLeave/search}" class="mdui-list-item mdui-ripple">查询请假信息</a>
+                <!--/*@thymesVar id="studentLeaveNum" type="java.lang.Long"*/-->
+                <a th:if="${studentLeaveNum!=0}" th:href="@{/studentLeave/show}" class="mdui-list-item mdui-ripple">历史请假信息</a>
+                <a th:if="${studentLeaveNum!=0}" th:href="@{/studentLeave/search}" class="mdui-list-item mdui-ripple">查询请假信息</a>
                 <a th:href="@{/studentLeave/add}" class="mdui-list-item mdui-ripple">添加请假信息</a>
             </div>
         </li>

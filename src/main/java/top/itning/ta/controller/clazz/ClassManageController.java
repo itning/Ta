@@ -15,6 +15,7 @@ import top.itning.ta.entity.ServerMessage;
 import top.itning.ta.exception.DataNotFindException;
 import top.itning.ta.exception.NullParameterException;
 import top.itning.ta.service.ClassManageService;
+import top.itning.ta.service.StudentLeaveService;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,9 +33,12 @@ public class ClassManageController {
 
     private final ClassManageService classManageService;
 
+    private final StudentLeaveService studentLeaveService;
+
     @Autowired
-    public ClassManageController(ClassManageService classManageService) {
+    public ClassManageController(ClassManageService classManageService, StudentLeaveService studentLeaveService) {
         this.classManageService = classManageService;
+        this.studentLeaveService = studentLeaveService;
     }
 
     /**
@@ -52,6 +56,7 @@ public class ClassManageController {
             model.addAttribute("classList", allClassInfo);
             logger.debug("showClassInfo::添加classList完成,集合大小->" + allClassInfo.size());
         }
+        model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
         return "classset";
     }
 

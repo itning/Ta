@@ -7,7 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import top.itning.ta.entity.Clazz;
-import top.itning.ta.service.FrameWorkService;
+import top.itning.ta.service.ClassManageService;
+import top.itning.ta.service.StudentLeaveService;
 
 import java.util.List;
 
@@ -20,11 +21,14 @@ import java.util.List;
 public class FrameWorkController {
     private static final Logger logger = LoggerFactory.getLogger(FrameWorkController.class);
 
-    private final FrameWorkService frameWorkService;
+    private final ClassManageService classManageService;
+
+    private final StudentLeaveService studentLeaveService;
 
     @Autowired
-    public FrameWorkController(FrameWorkService frameWorkService) {
-        this.frameWorkService = frameWorkService;
+    public FrameWorkController(ClassManageService classManageService, StudentLeaveService studentLeaveService) {
+        this.classManageService = classManageService;
+        this.studentLeaveService = studentLeaveService;
     }
 
     /**
@@ -57,12 +61,13 @@ public class FrameWorkController {
      */
     @GetMapping("/index")
     public String frameWorkInit(Model model) {
-        List<Clazz> allClazzInfo = frameWorkService.getAllClazzInfo();
+        List<Clazz> allClazzInfo = classManageService.getAllClassInfo();
         if (allClazzInfo.size() == 0) {
             logger.info("frameWorkInit::没有班级信息,将重定向到班级显示页面");
             return "redirect:/class/show";
         }
         model.addAttribute("classList", allClazzInfo);
+        model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
         logger.debug("frameWorkInit::添加classList完成,集合大小->" + allClazzInfo.size());
         return "index";
     }
