@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import top.itning.ta.entity.ServerMessage;
 import top.itning.ta.entity.StudentInfo;
 import top.itning.ta.exception.DataNotFindException;
+import top.itning.ta.exception.JsonDataNotFindException;
 import top.itning.ta.exception.NullParameterException;
 import top.itning.ta.service.ClassManageService;
 import top.itning.ta.service.StudentInfoService;
@@ -59,13 +60,17 @@ public class StudentInfoController {
      *
      * @param classID 班级ID
      * @return 学生信息集合
-     * @throws DataNotFindException 如果班级没有找到则抛出该异常
+     * @throws JsonDataNotFindException 如果班级没有找到则抛出该异常
      */
     @RequestMapping(value = "/show/class/{classID}", method = RequestMethod.GET)
     @ResponseBody
-    public List<StudentInfo> showStudentInfo(@PathVariable("classID") String classID) throws DataNotFindException {
+    public List<StudentInfo> showStudentInfo(@PathVariable("classID") String classID) throws JsonDataNotFindException {
         logger.debug("showStudentInfo::获取到的班级ID->" + classID);
-        return studentInfoService.getAllStudentInfoByClass(classID);
+        try {
+            return studentInfoService.getAllStudentInfoByClass(classID);
+        } catch (DataNotFindException e) {
+            throw new JsonDataNotFindException(e.getExceptionMessage());
+        }
     }
 
     /**

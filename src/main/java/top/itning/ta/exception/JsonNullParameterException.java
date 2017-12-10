@@ -1,17 +1,17 @@
 package top.itning.ta.exception;
 
 /**
- * 所查找的数据没有找到
+ * Json格式空参数异常
  *
- * @author wangn
+ * @author Ning
  */
-public class DataNotFindException extends DefaultException {
+public class JsonNullParameterException extends JsonException {
     /**
      * 异常消息
      */
     private String exceptionMessage;
 
-    public DataNotFindException(String exceptionMessage) {
+    public JsonNullParameterException(String exceptionMessage) {
         super(exceptionMessage);
         this.exceptionMessage = exceptionMessage;
     }

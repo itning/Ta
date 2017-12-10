@@ -5,7 +5,7 @@ package top.itning.ta.exception;
  *
  * @author wangn
  */
-public class NullParameterException extends Exception {
+public class NullParameterException extends DefaultException {
     /**
      * 异常消息
      */
