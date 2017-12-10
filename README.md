@@ -1,11 +1,15 @@
 # Teacher Assistant 教师助手
+[![GitHub stars](https://img.shields.io/github/stars/itning/Ta.svg?style=social&label=Stars)]()
+[![GitHub forks](https://img.shields.io/github/forks/itning/Ta.svg?style=social&label=Fork)]()
+[![GitHub watchers](https://img.shields.io/github/watchers/itning/Ta.svg?style=social&label=Watch)]()
+[![GitHub followers](https://img.shields.io/github/followers/itning.svg?style=social&label=Follow)]()
 
 [![GitHub license](https://img.shields.io/github/license/itning/Ta.svg)](https://github.com/itning/Ta/blob/master/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/itning/Ta.svg)]()
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/itning/Ta.svg)]()
+[![GitHub release](https://img.shields.io/github/release/itning/Ta.svg)]()
 [![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/Ta.svg)]()
 [![language](https://img.shields.io/badge/language-JAVA-orange.svg)]()
-[![GitHub stars](https://img.shields.io/github/stars/itning/Ta.svg?style=social&label=Stars)]()
+
 
 ### 简介
 > 教师助手（以下简称Ta）是一款能帮助教师管理学生信息，学生请假记录，请假批复的平台
