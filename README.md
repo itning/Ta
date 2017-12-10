@@ -1,4 +1,12 @@
 # Teacher Assistant 教师助手
+
+[![GitHub license](https://img.shields.io/github/license/itning/Ta.svg)](https://github.com/itning/Ta/blob/master/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/itning/Ta.svg)]()
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/itning/Ta.svg)]()
+[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/Ta.svg)]()
+[![language](https://img.shields.io/badge/language-JAVA-orange.svg)]()
+[![GitHub stars](https://img.shields.io/github/stars/itning/Ta.svg?style=social&label=Stars)]()
+
 ### 简介
 > 教师助手（以下简称Ta）是一款能帮助教师管理学生信息，学生请假记录，请假批复的平台
 
@@ -28,13 +36,6 @@
 11. 登陆功能
 12. 细颗粒度安全控制
     - 方法级别权限控制
-
-[![GitHub license](https://img.shields.io/github/license/itning/Ta.svg)](https://github.com/itning/Ta/blob/master/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/itning/Ta.svg)]()
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/itning/Ta.svg)]()
-[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/Ta.svg)]()
-[![language](https://img.shields.io/badge/language-JAVA-orange.svg)]()
-[![GitHub stars](https://img.shields.io/github/stars/itning/Ta.svg?style=social&label=Stars)]()
 
 ### 安装使用
 - 项目使用jdk9编译，项目使用编译器为IntelliJ IDEA
