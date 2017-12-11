@@ -143,7 +143,7 @@
                 <button id="down_select_btn" onclick="down_select()"
                         class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" disabled>选中下载
                 </button>
-                <button id="del_select_btn" onclick="del_select(false)"
+                <button id="del_select_btn" onclick="del_select(false)" sec:authorize="hasAuthority('A')"
                         class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" disabled>选中删除
                 </button>
                 <button id="add_stu_btn"

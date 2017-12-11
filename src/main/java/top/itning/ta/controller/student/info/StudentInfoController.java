@@ -137,7 +137,7 @@ public class StudentInfoController {
      * @param id 学生ID
      * @return json 消息
      */
-    @PreAuthorize("hasAnyAuthority('A','B')")
+    @PreAuthorize("hasAuthority('A')")
     @GetMapping("/del/student/{id}")
     @ResponseBody
     public ServerMessage delStudentInfo(@PathVariable("id") String id) {
