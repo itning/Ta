@@ -77,6 +77,7 @@ public class FrameWorkController {
         model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
         model.addAttribute("themeColor", settingService.getThemeColor());
         model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
+        model.addAttribute("hasStudent", classManageService.hasStudent());
         logger.debug("frameWorkInit::添加classList完成,集合大小->" + allClazzInfo.size());
         return "index";
     }

@@ -110,6 +110,7 @@ public class StudentInfoController {
         model.addAttribute("classList", classManageService.getAllClassInfo());
         model.addAttribute("themeColor", settingService.getThemeColor());
         model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
+        model.addAttribute("hasStudent", classManageService.hasStudent());
         logger.debug("addStudentByWeb::classInfo/classList添加完成");
         return "addstudent";
     }

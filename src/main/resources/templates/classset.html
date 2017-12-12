@@ -65,7 +65,7 @@
             </div>
         </li>
         <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
-        <li th:if="${classList.size()!=0}" class="mdui-collapse-item" sec:authorize="hasAnyAuthority('A','B')">
+        <li th:if="${classList.size()!=0&&hasStudent}" class="mdui-collapse-item" sec:authorize="hasAnyAuthority('A','B')">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
                 <div class="mdui-list-item-content">学生请假管理</div>

@@ -104,4 +104,16 @@ public class ClassManageServiceImpl implements ClassManageService {
         logger.debug("delClassInfo::开始班级信息");
         clazzDao.delete(id);
     }
+
+    @Override
+    public boolean hasStudent() {
+        List<Clazz> clazzList = this.getAllClassInfo();
+        final boolean[] hasStudent = {false};
+        clazzList.forEach(clazz -> {
+            if (this.getStudentNumByClassID(clazz.getId()) != 0) {
+                hasStudent[0] = true;
+            }
+        });
+        return hasStudent[0];
+    }
 }

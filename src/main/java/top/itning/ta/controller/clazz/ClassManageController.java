@@ -59,6 +59,7 @@ public class ClassManageController {
         model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
         model.addAttribute("themeColor", settingService.getThemeColor());
         model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
+        model.addAttribute("hasStudent", classManageService.hasStudent());
         return "classset";
     }
 

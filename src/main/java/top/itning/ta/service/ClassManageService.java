@@ -36,10 +36,17 @@ public interface ClassManageService {
     void addClassInfo(Clazz clazz) throws NullParameterException;
 
     /**
-     * 根基班级ID删除班级信息
+     * 根据班级ID删除班级信息
      *
      * @param id 班级ID
      * @throws DataNotFindException 如果该班级没有找到则抛出该异常
      */
     void delClassInfo(String id) throws DataNotFindException;
+
+    /**
+     * 检查所有班级是否有学生
+     *
+     * @return 当且仅当有班级有学生时返回true
+     */
+    boolean hasStudent();
 }

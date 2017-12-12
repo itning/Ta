@@ -113,13 +113,19 @@ public class StudentLeaveController {
     @PreAuthorize("hasAnyAuthority('A','B')")
     @GetMapping("/add")
     public String addStudentLeaveInfoRoute(Model model) {
-        model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
-        model.addAttribute("classList", classManageService.getAllClassInfo());
-        model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
-        model.addAttribute("themeColor", settingService.getThemeColor());
-        model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
-        logger.debug("addStudentLeaveInfoRoute::leaveTypeList/classList添加完成");
-        return "addleave";
+        if (classManageService.hasStudent()) {
+            logger.debug("addStudentLeaveInfoRoute::有学生信息");
+            model.addAttribute("classList", classManageService.getAllClassInfo());
+            model.addAttribute("leaveTypeList", leaveTypeService.getAllLeaveType());
+            model.addAttribute("studentLeaveNum", studentLeaveService.getStudentLeaveNum());
+            model.addAttribute("themeColor", settingService.getThemeColor());
+            model.addAttribute("themeColorAccent", settingService.getThemeColorAccent());
+            logger.debug("addStudentLeaveInfoRoute::leaveTypeList/classList添加完成");
+            return "addleave";
+        } else {
+            logger.info("addStudentLeaveInfoRoute::没有学生,跳转到学生信息管理页面");
+            return "redirect:/index";
+        }
     }
 
     /**
