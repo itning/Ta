@@ -55,6 +55,24 @@
     java -jar xxx.jar
     ```
 - 登陆用户名密码目前需要手动添加到数据库中
+- user表建表语句
+    ```
+    SET FOREIGN_KEY_CHECKS=0;
+    DROP TABLE IF EXISTS `user`;
+    CREATE TABLE `user` (
+      `id` varchar(255) NOT NULL,
+      `name` varchar(255) NOT NULL,
+      `password` varchar(255) NOT NULL,
+      `role` varchar(255) NOT NULL,
+      `tc` varchar(255) DEFAULT NULL,
+      `tca` varchar(255) DEFAULT NULL,
+      `username` varchar(255) NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ```
+    其中role可填A/B/C 
+    
+    A为教师权限;B为班委权限;C为普通学生权限;
 ### 技术架构
 #### 前端
 - [MDUI](https://www.mdui.org/)
