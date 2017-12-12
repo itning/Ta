@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import top.itning.ta.entity.Clazz;
 import top.itning.ta.entity.ServerMessage;
 import top.itning.ta.exception.DataNotFindException;
@@ -102,7 +105,7 @@ public class ClassManageController {
         try {
             classManageService.delClassInfo(id);
         } catch (DataNotFindException e) {
-            logger.warn("addClassInfo::删除失败->" + e.getExceptionMessage());
+            logger.warn("delClassInfo::删除失败->" + e.getExceptionMessage());
             serverMessage.setCode(ServerMessage.SERVICE_ERROR);
             serverMessage.setMsg(e.getExceptionMessage());
         }
