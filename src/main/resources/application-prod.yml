@@ -26,4 +26,4 @@ spring:
   resources:
     static-locations: /META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${spring.http.multipart.location}
 logging:
-  level: error
+  level: warn
