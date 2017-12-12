@@ -27,3 +27,5 @@ spring:
     static-locations: /META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${spring.http.multipart.location}
 logging:
   level: warn
+  level.top: warn
+  file: C:/Users/Ning/Desktop/upload/log.log
