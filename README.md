@@ -77,7 +77,7 @@
 #### 前端
 - [MDUI](https://www.mdui.org/)
 - [canvas-nest](https://github.com/hustcc/canvas-nest.js)
-- [My97 DatePicker](http://www.my97.net/license.asp)
+- [My97 DatePicker](http://www.my97.net/index.asp)
 - [Jquery](https://jquery.org/)
 #### 后端
 - Spring Boot
