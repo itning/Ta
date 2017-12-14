@@ -46,7 +46,7 @@
 
 ### 安装使用
 - 项目使用jdk9编译，项目使用编译器为IntelliJ IDEA
-- 要求最低jdk版本为1.8 （项目使用了jdk1.8新特性）
+- 要求最低jdk版本为9 （项目使用了jdk9新特性）
 - 项目数据库目前使用的是mysql，更改数据库请在配置文件中修改（application-dev.yml和application-prod.yml [开发环境和生产环境]）
 - 使用mysql用户名为root密码为kingston,修改也在配置文件中修改
 - 项目使用ORM技术 无需创建数据库和表
