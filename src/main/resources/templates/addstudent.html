@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -85,7 +86,8 @@
             </div>
         </li>
         <!--/*@thymesVar id="classList" type="java.util.List<top.itning.ta.entity.Clazz>"*/-->
-        <li th:if="${classList.size()!=0&&hasStudent}" class="mdui-collapse-item" sec:authorize="hasAnyAuthority('A','B')">
+        <li th:if="${classList.size()!=0&&hasStudent}" class="mdui-collapse-item"
+            sec:authorize="hasAnyAuthority('A','B')">
             <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
                 <i class="mdui-list-item-icon mdui-icon material-icons">device_hub</i>
                 <div class="mdui-list-item-content">学生请假管理</div>

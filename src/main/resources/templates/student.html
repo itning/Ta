@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -195,7 +196,8 @@
                                 <p align=center style='text-align:center'><span style='font-size:9.0pt'>班级：</span></p>
                             </td>
                             <td width=169 style='width:126.7pt;height:21.15pt' class="mdui-p-a-0">
-                                <p align=center style='text-align:center'><input type="hidden" name="clazz" th:value="${studentInfo.clazz.id}">
+                                <p align=center style='text-align:center'><input type="hidden" name="clazz"
+                                                                                 th:value="${studentInfo.clazz.id}">
                                     <!--/*@thymesVar id="studentInfo" type="top.itning.ta.entity.StudentInfo"*/-->
                                     <span data-name="class" data-type="text"
                                           th:text="${studentInfo.clazz.clazz}">1603</span></p>

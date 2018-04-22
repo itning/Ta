@@ -37,7 +37,7 @@ public class ExceptionResolver {
      */
     @ExceptionHandler(value = DefaultException.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
-        logger.warn("defaultErrorHandler->"+e.getMessage());
+        logger.warn("defaultErrorHandler->" + e.getMessage());
         ModelAndView mav = new ModelAndView();
         mav.addObject("exceptionMessage", e.getMessage());
         mav.addObject("url", req.getRequestURL().toString());
@@ -55,7 +55,7 @@ public class ExceptionResolver {
      */
     @ExceptionHandler(value = Exception.class)
     public ModelAndView otherErrorHandler(HttpServletRequest req, Exception e) throws Exception {
-        logger.warn("otherErrorHandler->"+e.getMessage());
+        logger.warn("otherErrorHandler->" + e.getMessage());
         ModelAndView mav = new ModelAndView();
         mav.addObject("exceptionMessage", e.getMessage());
         mav.addObject("url", req.getRequestURL().toString());
@@ -74,7 +74,7 @@ public class ExceptionResolver {
     @ExceptionHandler(value = JsonException.class)
     @ResponseBody
     public ServerMessage jsonErrorHandler(HttpServletRequest req, Exception e) throws Exception {
-        logger.warn("jsonErrorHandler->"+e.getMessage());
+        logger.warn("jsonErrorHandler->" + e.getMessage());
         ServerMessage serverMessage = new ServerMessage();
         if (e instanceof NullParameterException || e instanceof DataNotFindException) {
             serverMessage.setCode(ServerMessage.SERVICE_ERROR);
