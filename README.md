@@ -86,11 +86,11 @@
 - Apache POI
 ### 预览
 
-![i](https://github.com/itning/Ta/tree/master/pic/login.png).
-![i](https://github.com/itning/Ta/tree/master/pic/show1.png)
-![i](https://github.com/itning/Ta/tree/master/pic/show2.png)
-![i](https://github.com/itning/Ta/tree/master/pic/show3.png)
-![i](https://github.com/itning/Ta/tree/master/pic/show4.png)
+![i](https://github.com/itning/Ta/blob/master/pic/login.png).
+![i](https://github.com/itning/Ta/blob/master/pic/show1.png)
+![i](https://github.com/itning/Ta/blob/master/pic/show2.png)
+![i](https://github.com/itning/Ta/blob/master/pic/show3.png)
+![i](https://github.com/itning/Ta/blob/master/pic/show4.png)
 
 ### 开源协议
 - [MIT](https://github.com/itning/Ta/blob/master/LICENSE)
