@@ -1,15 +1,16 @@
 # Teacher Assistant 教师助手
-[![GitHub stars](https://img.shields.io/github/stars/itning/Ta.svg?style=social&label=Stars)]()
-[![GitHub forks](https://img.shields.io/github/forks/itning/Ta.svg?style=social&label=Fork)]()
-[![GitHub watchers](https://img.shields.io/github/watchers/itning/Ta.svg?style=social&label=Watch)]()
-[![GitHub followers](https://img.shields.io/github/followers/itning.svg?style=social&label=Follow)]()
+[![GitHub stars](https://img.shields.io/github/stars/itning/Ta.svg?style=social&label=Stars)](https://github.com/itning/Ta/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/itning/Ta.svg?style=social&label=Fork)](https://github.com/itning/Ta/network/members)
+[![GitHub watchers](https://img.shields.io/github/watchers/itning/Ta.svg?style=social&label=Watch)](https://github.com/itning/Ta/watchers)
+[![GitHub followers](https://img.shields.io/github/followers/itning.svg?style=social&label=Follow)](https://github.com/itning?tab=followers)
 
+[![GitHub issues](https://img.shields.io/github/issues/itning/Ta.svg)](https://github.com/itning/Ta/issues)
 [![GitHub license](https://img.shields.io/github/license/itning/Ta.svg)](https://github.com/itning/Ta/blob/master/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/itning/Ta.svg)]()
-[![GitHub release](https://img.shields.io/github/release/itning/Ta.svg)]()
-[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/Ta.svg)]()
-[![language](https://img.shields.io/badge/language-JAVA-orange.svg)]()
-
+[![GitHub last commit](https://img.shields.io/github/last-commit/itning/Ta.svg)](https://github.com/itning/Ta/commits)
+[![GitHub release](https://img.shields.io/github/release/itning/Ta.svg)](https://github.com/itning/Ta/releases)
+[![GitHub repo size in bytes](https://img.shields.io/github/repo-size/itning/Ta.svg)](https://github.com/itning/Ta)
+[![HitCount](http://hits.dwyl.io/itning/Ta.svg)](http://hits.dwyl.io/itning/Ta)
+[![language](https://img.shields.io/badge/language-JAVA-green.svg)](https://github.com/itning/Ta)
 
 ### 简介
 > 教师助手（以下简称Ta）是一款能帮助教师管理学生信息，学生请假记录，请假批复的平台
